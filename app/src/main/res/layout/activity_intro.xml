@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="100">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="30">
+
+    </TextView>
+    <ImageView
+        android:layout_width="170dp"
+        android:layout_height="170dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="10"
+
+        android:src="@drawable/question">
+
+    </ImageView>
+    <TextView
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="60dp"
+        android:text="Lunch box"
+        android:fontFamily="@font/hyp"
+        android:gravity="center_horizontal"
+        android:layout_weight="20"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="40"
+        android:fontFamily="@font/hyp"
+        android:textSize="30dp"
+        android:text="뭐먹지..."
+        android:gravity="center"
+        android:id="@+id/intro_Text"
+        android:textStyle="bold"/>
+
+
+
+
+</LinearLayout>

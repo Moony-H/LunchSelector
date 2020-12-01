@@ -18,12 +18,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.util.*
 import kotlin.concurrent.timer
+import kotlin.concurrent.timerTask
 
 
 class MainActivity : AppCompatActivity() {
-
     var mapview:MapView?=null
+    var marker=MapPOIItem()
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
@@ -31,20 +33,9 @@ class MainActivity : AppCompatActivity() {
     var prevlongitude:Double=0.0
     var myLocationManager:LocationManagement?=null
     var trackingStop=false
-    val customMapViewEvents= MapViewEvents()
-    fun locationChanged():Boolean{
-        if(prevlatitude!=latitude || prevlongitude!=longitude)
-        {
-            prevlatitude=latitude
-            prevlongitude=longitude
-            return true
-        }
-        return false
-    }
-    fun test(){
-        mapview?.mapCenterPoint?.mapPointGeoCoord?.latitude
-        mapview?.mapCenterPoint?.mapPointGeoCoord?.longitude
-    }
+
+
+
 
 
 
@@ -83,11 +74,14 @@ class MainActivity : AppCompatActivity() {
 
 
 
+
         val viewGroup = Main_layout
         //이유는 모르지만 맵 뷰는 항상 onCreate에 있어야 한다.
         mapview=MapView(this)
         viewGroup.addView(mapview)
-        mapview?.setMapViewEventListener(customMapViewEvents)
+
+
+
 
 
 
@@ -95,9 +89,9 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
     override fun onResume() {
         super.onResume()
-        var marker=MapPOIItem()
         marker.itemName="Test_Marker"
         marker.tag=0
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
@@ -105,29 +99,17 @@ class MainActivity : AppCompatActivity() {
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
 
 
+
         if(myLocationManager!!.CheckLocationPermission()){
             myLocationManager?.LocationListenerSetting()
-            myLocationManager?.LocationUpdateSetting(5000,5f)
+            myLocationManager?.LocationUpdateSetting(5000,0.1f)
         }
 
-
-        timer(period = 3000) {
-            longitude=myLocationManager!!.longitude
-            latitude=myLocationManager!!.latitude
-            runOnUiThread{
-                mapview?.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(latitude,longitude),true)
-                if(locationChanged()){
-                    mapview?.removePOIItem(marker)
-                    marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-                    mapview?.addPOIItem(marker)
-                }
+        val customMapViewEvents= mapview?.let { MapViewEvents(this, it, myLocationManager!!,marker) }
+        mapview?.setMapViewEventListener(customMapViewEvents)
 
 
-            }
-            if(trackingStop){
-                cancel()
-            }
-        }
+
 
 
     }

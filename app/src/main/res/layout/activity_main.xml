@@ -7,20 +7,38 @@
     tools:context=".MainActivity"
     android:id="@+id/Main_layout">
 
-    <net.daum.android.map.MapView
-        android:id="@+id/Main_MapView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-    </net.daum.android.map.MapView>
-    <Button
-        android:layout_width="wrap_content"
+
+    <SearchView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:width="100dp"
-        android:height="100dp"
-        android:background="@color/cardview_dark_background">
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="50dp"
+        android:width="350dp"
+        android:height="60dp"
+        android:autofillHints=""
+        android:background="@drawable/horizontal_long_button"
+        android:queryHint="장소 검색"
+        android:visibility="visible"
+        android:id="@+id/LocationSearchBar">
+
+    </SearchView>
+
+    <Button
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/horizontal_long_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="40dp"
+        android:id="@+id/myLocationButton"
+        >
 
     </Button>
+
+
+
+
 
 
 

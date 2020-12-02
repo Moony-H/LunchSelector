@@ -33,6 +33,13 @@ class MainActivity : AppCompatActivity() {
     var prevlongitude:Double=0.0
     var myLocationManager:LocationManagement?=null
     var trackingStop=false
+    var customMapViewEvents:MapViewEvents?=null
+    val clickListener = View.OnClickListener {
+         if(it.id==myLocationButton.id){
+             Log.e("Location","Location Button Downed")
+
+         }
+    }
 
 
 
@@ -79,7 +86,10 @@ class MainActivity : AppCompatActivity() {
         //이유는 모르지만 맵 뷰는 항상 onCreate에 있어야 한다.
         mapview=MapView(this)
         viewGroup.addView(mapview)
-
+        customMapViewEvents= mapview?.let { MapViewEvents(this, it, myLocationManager!!,marker) }
+        myLocationButton.bringToFront()
+        LocationSearchBar.bringToFront()
+        myLocationButton.setOnClickListener(clickListener)
 
 
 
@@ -105,8 +115,9 @@ class MainActivity : AppCompatActivity() {
             myLocationManager?.LocationUpdateSetting(5000,0.1f)
         }
 
-        val customMapViewEvents= mapview?.let { MapViewEvents(this, it, myLocationManager!!,marker) }
+
         mapview?.setMapViewEventListener(customMapViewEvents)
+
 
 
 

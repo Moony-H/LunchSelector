@@ -22,7 +22,7 @@ interface  LocationInter{
     fun CheckLocationPermission():Boolean
     fun LocationListenerSetting()
     fun LocationUpdateSetting(msec:Long, meter: Float)
-    fun LocationListenerStop()
+    fun StopLocationListener()
 
 
 }
@@ -149,7 +149,7 @@ class LocationManagement (val ActivityToUse: Activity):LocationInter{
 
 
 
-    override fun LocationListenerStop() {
+    override fun StopLocationListener() {
         myLocationManager?.removeUpdates(locationListener)
     }
 

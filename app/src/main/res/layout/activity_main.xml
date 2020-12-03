@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="35dp"
         android:width="350dp"
         android:height="60dp"
         android:autofillHints=""
@@ -30,7 +30,8 @@
         android:background="@drawable/horizontal_long_button"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_margin="40dp"
+        android:layout_marginBottom="45dp"
+        android:layout_marginRight="30dp"
         android:id="@+id/myLocationButton"
         >
 

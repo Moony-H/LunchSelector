@@ -3,6 +3,7 @@ package com.example.lunchbox
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
@@ -15,6 +16,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.activity_main.*
+import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -29,24 +31,22 @@ class MainActivity : AppCompatActivity() {
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
-    var prevlatitude:Double=0.0
-    var prevlongitude:Double=0.0
     var myLocationManager:LocationManagement?=null
-    var trackingStop=false
     var customMapViewEvents:MapViewEvents?=null
     val clickListener = View.OnClickListener {
-         if(it.id==myLocationButton.id){
-             Log.e("Location","Location Button Downed")
+        when(it.id){
+            myLocationButton.id->{Log.e("Location","Location Button Downed")
+                customMapViewEvents?.allStop=false}
+        }
 
-         }
     }
-
-
-
-
-
-
-
+    enum class POIItemNumber(val number:Int) {
+        PICKMARKER(0),RANGEPOINT(2)
+    }
+    inner class AxisPoint(){
+        var xAxis:Double=0.0
+        var yAxis:Double=0.0
+    }
 
 
 
@@ -86,16 +86,15 @@ class MainActivity : AppCompatActivity() {
         //이유는 모르지만 맵 뷰는 항상 onCreate에 있어야 한다.
         mapview=MapView(this)
         viewGroup.addView(mapview)
-        customMapViewEvents= mapview?.let { MapViewEvents(this, it, myLocationManager!!,marker) }
+        customMapViewEvents= MapViewEvents(this, myLocationManager!!,marker)
         myLocationButton.bringToFront()
         LocationSearchBar.bringToFront()
         myLocationButton.setOnClickListener(clickListener)
+        val circle=MapCircle(MapPoint.mapPointWithGeoCoord(37.537094, 127.005470), // center
+            10, // radius
+            R.color.ThemeSubColor, // strokeColor
+            R.color.ThemeColor)// fillColor
 
-
-
-
-
-        
 
     }
 
@@ -103,11 +102,11 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         marker.itemName="Test_Marker"
-        marker.tag=0
+        marker.tag=POIItemNumber.PICKMARKER.number
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
         marker.markerType=MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
-
+        marker.isDraggable
 
 
         if(myLocationManager!!.CheckLocationPermission()){
@@ -115,8 +114,8 @@ class MainActivity : AppCompatActivity() {
             myLocationManager?.LocationUpdateSetting(5000,0.1f)
         }
 
-
         mapview?.setMapViewEventListener(customMapViewEvents)
+        //mapview?.setPOIItemEventListener()
 
 
 
@@ -125,8 +124,13 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onStop() {
+        super.onStop()
+        myLocationManager?.StopLocationListener()
+    }
+
     override fun onDestroy() {
         super.onDestroy()
-        myLocationManager?.LocationListenerStop()
+        myLocationManager?.StopLocationListener()
     }
 }

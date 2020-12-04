@@ -1,8 +1,15 @@
+package com.example.lunchbox
+
 import android.location.Location
 import kotlin.math.PI
 import kotlin.math.absoluteValue
 
 class DistanceManager {
+    fun Pythagoras(x1:Double,y1:Double,x2:Double,y2:Double):Double{
+        val x=x1-x2
+        val y=y2-y1
+        return Math.sqrt(x*x+y*y)
+    }
     fun LocationToDistance(Location1:Location, Location2:Location):Double{
         val lon1=Location1.longitude
         val lon2=Location2.longitude

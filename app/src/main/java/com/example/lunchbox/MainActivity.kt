@@ -28,25 +28,25 @@ import kotlin.concurrent.timerTask
 class MainActivity : AppCompatActivity() {
     var mapview:MapView?=null
     var marker=MapPOIItem()
+    var customPOIEvents:POIEvents?=null
+    var rangePoint:MapPOIItem?=null
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
     var myLocationManager:LocationManagement?=null
     var customMapViewEvents:MapViewEvents?=null
+    var circle:MapCircle?=null
     val clickListener = View.OnClickListener {
         when(it.id){
             myLocationButton.id->{Log.e("Location","Location Button Downed")
-                customMapViewEvents?.allStop=false}
+                customMapViewEvents?.StartTracking()}
         }
 
     }
     enum class POIItemNumber(val number:Int) {
-        PICKMARKER(0),RANGEPOINT(2)
+        PICKMARKER(0),RANGEPOINT(1)
     }
-    inner class AxisPoint(){
-        var xAxis:Double=0.0
-        var yAxis:Double=0.0
-    }
+
 
 
 
@@ -74,26 +74,55 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        //전체화면모드 활성화
         window.decorView.systemUiVisibility=(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
-        //이유는 모르지만 무조건 객체를 생성할 때, 클래스 필드로 생성하면 안댄다 ㅠㅠ
 
-        myLocationManager= LocationManagement(this)
-
-
-
-
+        //맵을 뷰에 추가
         val viewGroup = Main_layout
-        //이유는 모르지만 맵 뷰는 항상 onCreate에 있어야 한다.
         mapview=MapView(this)
         viewGroup.addView(mapview)
-        customMapViewEvents= MapViewEvents(this, myLocationManager!!,marker)
+
+
+        //위치추적 매니저 생성.
+        myLocationManager= LocationManagement(this)
+
+        //맵 이벤트 생성
+        customMapViewEvents= MapViewEvents( myLocationManager!!,marker)
+
+        //버튼과 검색 바
         myLocationButton.bringToFront()
         LocationSearchBar.bringToFront()
+
+
+        //써클의 기본 세팅
+        circle=MapCircle(
+            mapview?.mapCenterPoint,  // center
+            500,  // radius
+            R.color.ThemeSubColor,  // strokeColor
+            R.color.ThemeColor // fillColor
+        )
+
+        //******드래그 가능한 원의 포인트 세팅******
+        rangePoint=MapPOIItem()
+        rangePoint?.isDraggable=true
+        rangePoint?.markerType=MapPOIItem.MarkerType.CustomImage
+        rangePoint?.customImageResourceId=R.drawable.question
+        rangePoint?.setCustomImageAnchor(0.5f, 0.5f)
+        rangePoint?.itemName="rangePoint"
+        rangePoint?.tag= POIItemNumber.RANGEPOINT.number
+
+        //POI이벤트 생성
+        customPOIEvents= POIEvents(circle!!,rangePoint!!)
+
+
+
+
+
+
+        //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
-        val circle=MapCircle(MapPoint.mapPointWithGeoCoord(37.537094, 127.005470), // center
-            10, // radius
-            R.color.ThemeSubColor, // strokeColor
-            R.color.ThemeColor)// fillColor
+
 
 
     }
@@ -101,32 +130,38 @@ class MainActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+
+        //마커 생성
         marker.itemName="Test_Marker"
         marker.tag=POIItemNumber.PICKMARKER.number
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
         marker.markerType=MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
-        marker.isDraggable
 
 
+        //위치 권한 체크 밑 위치추적 활성화
         if(myLocationManager!!.CheckLocationPermission()){
             myLocationManager?.LocationListenerSetting()
             myLocationManager?.LocationUpdateSetting(5000,0.1f)
         }
 
+
+        //맵뷰에 이벤트 추가
         mapview?.setMapViewEventListener(customMapViewEvents)
-        //mapview?.setPOIItemEventListener()
-
-
-
-
+        mapview?.setPOIItemEventListener(customPOIEvents)
 
 
     }
 
+    override fun onPause() {
+        super.onPause()
+        myLocationManager?.StopLocationListener()
+        mapview?.removeAllPOIItems()
+    }
+
     override fun onStop() {
         super.onStop()
-        myLocationManager?.StopLocationListener()
+
     }
 
     override fun onDestroy() {

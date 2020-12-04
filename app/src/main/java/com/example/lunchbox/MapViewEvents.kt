@@ -10,26 +10,26 @@ import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(val ActivityToUse:Activity,val myLocationManager: LocationManagement,val marker:MapPOIItem): MapView.MapViewEventListener {
+class MapViewEvents(val myLocationManager: LocationManagement,val marker:MapPOIItem): MapView.MapViewEventListener {
     var timer: Timer? = null
     var allStop = false
     var mapview:MapView?=null
 
 
 
+    private fun GoToMyLocation(Point:MapPoint=MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude)) {
+        mapview?.setMapCenterPoint(Point,true)
 
+    }
     fun StopTracking(){allStop=true}
 
     fun StartTracking(){
         allStop=false
-        ActivityToUse.runOnUiThread {
-            mapview?.setMapCenterPoint(
-                MapPoint.mapPointWithGeoCoord(
-                    myLocationManager.latitude,
-                    myLocationManager.longitude
-                ), true)
+        GoToMyLocation()
+        mapview?.removePOIItem(marker)
+        CreatePin()
+        TimerStart()
 
-        }
     }
 
     private fun CheckStop(){
@@ -39,31 +39,37 @@ class MapViewEvents(val ActivityToUse:Activity,val myLocationManager: LocationMa
         }
     }
 
+    private fun CreatePin(){
+        marker.mapPoint = MapPoint.mapPointWithGeoCoord(
+            myLocationManager.latitude,
+            myLocationManager.longitude
+        )
+        mapview?.addPOIItem(marker)
+    }
+
     private fun TimerStart() {
 
         timer = timer(period = 3000, initialDelay = 3000) {
-            ActivityToUse.runOnUiThread {
-                mapview?.setMapCenterPoint(
-                    MapPoint.mapPointWithGeoCoord(
-                        myLocationManager.latitude,
-                        myLocationManager.longitude
-                    ), true)
-
-                mapview?.removePOIItem(marker)
-                marker.mapPoint = MapPoint.mapPointWithGeoCoord(
-                    myLocationManager.latitude,
-                    myLocationManager.longitude
-                )
-                mapview?.addPOIItem(marker)
-                //Log.e("Map", "${myLocationManager.latitude} ${myLocationManager.longitude}")
+            GoToMyLocation()
+            mapview?.removePOIItem(marker)
+            CreatePin()
+            for (i in mapview?.poiItems!!){
+                Log.e("HEYing","${i.tag}")
             }
-
+                //Log.e("Map", "${myLocationManager.latitude} ${myLocationManager.longitude}")
         }
+
+
     }
 
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Tuched")
-        CheckStop()
+        timer?.cancel()
+        StopTracking()
+        marker.mapPoint=p1
+        p0?.removePOIItem(marker)
+        p0?.addPOIItem(marker)
+        GoToMyLocation(marker.mapPoint)
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
@@ -97,13 +103,13 @@ class MapViewEvents(val ActivityToUse:Activity,val myLocationManager: LocationMa
     override fun onMapViewInitialized(p0: MapView?) {
         Log.e("Map", "Initialized")
         mapview=p0
-        TimerStart()
+        StartTracking()
+
     }
 
     override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
-        timer?.cancel()
-        allStop = true
-        mapview?.addPOIItem(marker)
+        CheckStop()
+        Log.e("Map","LongPressed")
     }
 
 

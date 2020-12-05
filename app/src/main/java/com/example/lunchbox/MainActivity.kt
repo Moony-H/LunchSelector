@@ -14,6 +14,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapCircle
@@ -74,7 +75,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        resources.getColor(R.color.ThemeColor)
         //전체화면모드 활성화
         window.decorView.systemUiVisibility=(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
@@ -99,8 +100,8 @@ class MainActivity : AppCompatActivity() {
         circle=MapCircle(
             mapview?.mapCenterPoint,  // center
             500,  // radius
-            R.color.ThemeSubColor,  // strokeColor
-            R.color.ThemeColor // fillColor
+            ContextCompat.getColor(this, R.color.ThemeColor),
+            ContextCompat.getColor(this,R.color.ThemeSubColor)// fillColor
         )
 
         //******드래그 가능한 원의 포인트 세팅******

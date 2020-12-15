@@ -24,7 +24,7 @@
 
     </SearchView>
 
-    <Button
+    <ImageButton
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:background="@drawable/horizontal_long_button"
@@ -33,9 +33,11 @@
         android:layout_marginBottom="45dp"
         android:layout_marginRight="30dp"
         android:id="@+id/myLocationButton"
+        android:src="@drawable/mylocation"
+        android:scaleType="centerCrop"
         >
 
-    </Button>
+    </ImageButton>
 
 
 

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
-        <shape>
+        <shape >
             <solid android:color="@color/colorWhite">
+
+            </solid>
+            <solid>
 
             </solid>
             <corners android:radius="30dp">
@@ -10,4 +13,5 @@
             </corners>
         </shape>
     </item>
+
 </selector>

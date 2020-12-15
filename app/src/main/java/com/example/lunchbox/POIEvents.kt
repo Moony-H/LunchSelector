@@ -14,56 +14,54 @@ import java.util.*
 import kotlin.concurrent.timer
 
 
-class POIEvents(var circle: MapCircle,var rangePoint: MapPOIItem):MapView.POIItemEventListener {
+class POIEvents(val circle: MapCircle,val rangePoint: MapPOIItem):MapView.POIItemEventListener {
     var rangeAppointed=false
     var DistanceManager=DistanceManager()
     var PinPoint:MapPOIItem?=null
     var thread: Timer?=null//Thread?=null
-
+    var PrevLocationX=0.0
+    var PrevLocationY=0.0
     fun CirclePainter(p0:MapView?,p1: MapPOIItem?){
+        Log.e("P1 is","${p1?.itemName}")
+        //p1= rangePoint, p0= MapView
+
+
         thread= timer(period = 100){
-            p0?.removeCircle(circle)
-            Log.e("hey","RangePoint is ${rangePoint?.mapPoint?.mapPointScreenLocation!!.x} ${rangePoint?.mapPoint?.mapPointScreenLocation!!.y}")
-            var rangePoint=p0?.findPOIItemByTag(MainActivity.POIItemNumber.RANGEPOINT.number)
-            val rangePointX=rangePoint?.mapPoint?.mapPointScreenLocation!!.x
-            val rangePointY = rangePoint?.mapPoint?.mapPointScreenLocation!!.y
-            val locationPointX=PinPoint?.mapPoint?.mapPointScreenLocation!!.x
-            val locationPointY=PinPoint?.mapPoint?.mapPointScreenLocation!!.y
+            if(PrevLocationX!=p1?.mapPoint?.mapPointScreenLocation?.x || PrevLocationY!=p1?.mapPoint?.mapPointScreenLocation?.y)
+            {
+                //전 위치 갱신.
+                PrevLocationX=p1?.mapPoint?.mapPointScreenLocation!!.x
+                PrevLocationY=p1?.mapPoint?.mapPointScreenLocation!!.y
 
-            //피타고라스로 두개의 점의 거리 재기.
-            val radius=DistanceManager.Pythagoras(
-                rangePointX,
-                rangePointY,
-                locationPointX,
-                locationPointY
-            )
 
-            //원의 가운데 점 지정.
-            circle.center=PinPoint?.mapPoint
-            circle.radius=radius.toInt()
-            p0?.addCircle(circle)
+                //전 Circle 지우기
+                p0?.removeCircle(circle)
+
+
+
+                val rangePointX=p1?.mapPoint?.mapPointScreenLocation!!.x
+                val rangePointY = p1?.mapPoint?.mapPointScreenLocation!!.y
+                val locationPointX=p1?.mapPoint?.mapPointScreenLocation!!.x
+                val locationPointY=p1?.mapPoint?.mapPointScreenLocation!!.y
+
+                //피타고라스로 두개의 점의 거리 재기.
+                val radius=DistanceManager.Pythagoras(
+                    rangePointX,
+                    rangePointY,
+                    locationPointX,
+                    locationPointY
+                )
+
+                //원의 가운데 점 지정.
+                circle.center=PinPoint?.mapPoint
+                circle.radius=radius.toInt()
+
+                p0?.addCircle(circle)
+                Log.e("HEYYYYYY","Doneeeeeee")
+            }
+
 
         }
-//        thread=Thread(){
-//            p0?.removeCircle(circle)
-//            val rangePointX=p1?.mapPoint?.mapPointScreenLocation!!.x
-//            val rangePointY = p1?.mapPoint?.mapPointScreenLocation!!.y
-//            val locationPointX=PinPoint?.mapPoint?.mapPointScreenLocation!!.x
-//            val locationPointY=PinPoint?.mapPoint?.mapPointScreenLocation!!.y
-//
-//            //피타고라스로 두개의 점의 거리 재기.
-//            val radius=DistanceManager.Pythagoras(
-//                rangePointX,
-//                rangePointY,
-//                locationPointX,
-//                locationPointY
-//            )
-//
-//            //원의 가운데 점 지정.
-//            circle.center=PinPoint?.mapPoint
-//            circle.radius=radius.toInt()
-//            p0?.addCircle(circle)}
-//        thread?.start()
 
     }
     override fun onCalloutBalloonOfPOIItemTouched(
@@ -74,6 +72,7 @@ class POIEvents(var circle: MapCircle,var rangePoint: MapPOIItem):MapView.POIIte
 
     override fun onDraggablePOIItemMoved(p0: MapView?, p1: MapPOIItem?, p2: MapPoint?) {
         //범위 지정 오브젝트 일때만 실행.
+        Log.e("Moved","Finished")
         p0?.removeCircle(circle)
         thread?.cancel()
 
@@ -81,22 +80,21 @@ class POIEvents(var circle: MapCircle,var rangePoint: MapPOIItem):MapView.POIIte
 
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
         if(p1?.tag==MainActivity.POIItemNumber.PICKMARKER.number){
+
             PinPoint=p1
             rangePoint.mapPoint= MapPoint.mapPointWithScreenLocation(
-                p1.mapPoint.mapPointScreenLocation.x+10.0,
-                p1.mapPoint.mapPointScreenLocation.y
+                p1?.mapPoint.mapPointScreenLocation.x+10.0,
+                p1?.mapPoint.mapPointScreenLocation.y
             )
 
-            Log.e("its","${p1.mapPoint.mapPointScreenLocation.x} ${p1.mapPoint.mapPointScreenLocation.y}")
+            Log.e("POIItem","PickMarker Selected")
 
-            Log.e("Pin","selected")
+            //rangePoint 추가.
             p0?.addPOIItem(rangePoint)
 
-            for (i in p0?.poiItems!!){
-                Log.e("Guys","${i.itemName}")
-            }
-            Log.e("Guys","${rangePoint.mapPoint.mapPointScreenLocation.x} ${rangePoint.mapPoint.mapPointScreenLocation.y}")
         }
+
+        //RangePoint 클릭하면 로그.
         if (p1?.tag==MainActivity.POIItemNumber.RANGEPOINT.number){
             Log.e("Guys","RangePoint is selected")
             CirclePainter(p0,p1)
@@ -118,5 +116,6 @@ class POIEvents(var circle: MapCircle,var rangePoint: MapPOIItem):MapView.POIIte
     override fun onCalloutBalloonOfPOIItemTouched(p0: MapView?, p1: MapPOIItem?) {
         TODO("Not yet implemented")
     }
+
 
 }

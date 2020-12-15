@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -40,12 +41,16 @@ class MainActivity : AppCompatActivity() {
     val clickListener = View.OnClickListener {
         when(it.id){
             myLocationButton.id->{Log.e("Location","Location Button Downed")
-                customMapViewEvents?.StartTracking()}
+                customMapViewEvents?.timer?.cancel()
+                customMapViewEvents?.StartTracking()
+
+            }
         }
 
     }
+
     enum class POIItemNumber(val number:Int) {
-        PICKMARKER(0),RANGEPOINT(1)
+        PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
     }
 
 
@@ -66,7 +71,6 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.finishAffinity(this)
 
             System.exit(0)
-            
         }
     }
 
@@ -85,13 +89,24 @@ class MainActivity : AppCompatActivity() {
         viewGroup.addView(mapview)
 
 
+        //마커 세팅
+        marker=MapPOIItem()
+        marker.itemName="Test_Marker"
+        marker.tag=POIItemNumber.PICKMARKER.number
+        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+        marker.markerType=MapPOIItem.MarkerType.BluePin
+        marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
+
+
+
+
         //위치추적 매니저 생성.
         myLocationManager= LocationManagement(this)
 
         //맵 이벤트 생성
         customMapViewEvents= MapViewEvents( myLocationManager!!,marker)
 
-        //버튼과 검색 바
+        //버튼과 검색 바 앞으로
         myLocationButton.bringToFront()
         LocationSearchBar.bringToFront()
 
@@ -103,6 +118,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.ThemeColor),
             ContextCompat.getColor(this,R.color.ThemeSubColor)// fillColor
         )
+        circle?.tag=POIItemNumber.CIRCLE.number
 
         //******드래그 가능한 원의 포인트 세팅******
         rangePoint=MapPOIItem()
@@ -113,8 +129,9 @@ class MainActivity : AppCompatActivity() {
         rangePoint?.itemName="rangePoint"
         rangePoint?.tag= POIItemNumber.RANGEPOINT.number
 
+
         //POI이벤트 생성
-        customPOIEvents= POIEvents(circle!!,rangePoint!!)
+        customPOIEvents= POIEvents(circle!!, rangePoint!!)
 
 
 
@@ -124,8 +141,6 @@ class MainActivity : AppCompatActivity() {
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
 
-
-
     }
 
 
@@ -133,11 +148,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
 
         //마커 생성
-        marker.itemName="Test_Marker"
-        marker.tag=POIItemNumber.PICKMARKER.number
-        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-        marker.markerType=MapPOIItem.MarkerType.BluePin
-        marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
+
 
 
         //위치 권한 체크 밑 위치추적 활성화

@@ -13,6 +13,7 @@ import android.location.LocationListener
 import android.os.Bundle
 import android.util.Log
 import android.content.Context
+import android.provider.Settings.Global.getString
 import android.widget.Toast
 import java.lang.NullPointerException
 

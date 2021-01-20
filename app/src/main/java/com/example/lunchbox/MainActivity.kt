@@ -24,6 +24,11 @@ import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
 import kotlin.concurrent.timer
 import kotlin.concurrent.timerTask
@@ -49,11 +54,37 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
+    val BaseURL:String=getString(R.string.RestAPI_URL)
+    val APIKey=getString(R.string.API_Key)
 
     enum class POIItemNumber(val number:Int) {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
     }
+
+    private fun ClientStart(Keyword:String,){
+        val retrofit: Retrofit=Retrofit.Builder()
+            .baseUrl(BaseURL).addConverterFactory(GsonConverterFactory.create()).build()
+        val api=retrofit.create(RestAPIClient::class.java)
+        val call = api.getFromKeyword(APIKey,Keyword,)   // 검색 조건 입력
+
+        // API 서버에 요청
+        call.enqueue(object: Callback<KeywordSearchData> {
+            override fun onResponse(
+                call: Call<KeywordSearchData>,
+                response: Response<KeywordSearchData>
+            ) {
+                // 통신 성공 (검색 결과는 response.body()에 담겨있음)
+                Log.d("Test", "Raw: ${response.raw()}")
+                Log.d("Test", "Body: ${response.body()}")
+            }
+
+            override fun onFailure(call: Call<KeywordSearchData>, t: Throwable) {
+                // 통신 실패
+                Log.w("MainActivity", "통신 실패: ${t.message}")
+            }
+        })
+    }
+
 
 
 
@@ -87,6 +118,8 @@ class MainActivity : AppCompatActivity() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+
         //맵을 뷰에 추가
         val viewGroup = Main_layout
         mapview=MapView(this)
@@ -158,7 +191,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-                return false
+                return true
             }
 
         })

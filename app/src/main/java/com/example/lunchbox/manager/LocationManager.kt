@@ -1,4 +1,4 @@
-package com.example.lunchbox
+package com.example.lunchbox.manager
 
 import android.Manifest;
 import android.annotation.SuppressLint
@@ -15,6 +15,7 @@ import android.util.Log
 import android.content.Context
 import android.provider.Settings.Global.getString
 import android.widget.Toast
+import com.example.lunchbox.R
 import java.lang.NullPointerException
 
 

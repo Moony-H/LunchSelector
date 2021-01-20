@@ -8,4 +8,5 @@
     <color name="ThemeColor">#66F39A17</color>
     <color name="ThemeSubColor">#66F46C40</color>
     <color name="colorGray">#2B2B2B</color>
+    <color name="black">#000000</color>
 </resources>

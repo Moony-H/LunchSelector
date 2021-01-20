@@ -1,4 +1,4 @@
-package com.example.lunchbox
+package com.example.lunchbox.manager
 
 import android.location.Location
 import kotlin.math.PI

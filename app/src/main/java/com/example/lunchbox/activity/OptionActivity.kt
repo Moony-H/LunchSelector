@@ -1,17 +1,9 @@
-package com.example.lunchbox
+package com.example.lunchbox.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
-import android.widget.Toast
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import kotlinx.android.synthetic.main.activity_main.*
-import net.daum.mf.map.api.MapView
-import java.util.jar.Manifest
-
-
+import com.example.lunchbox.R
 
 
 class OptionActivity : AppCompatActivity() {

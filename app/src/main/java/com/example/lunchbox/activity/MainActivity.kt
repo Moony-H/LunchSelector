@@ -1,23 +1,22 @@
-package com.example.lunchbox
+package com.example.lunchbox.activity
 
-import android.Manifest
-import android.content.Context
-import android.content.pm.PackageManager
-import android.graphics.Color
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.SystemClock
+
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.ImageView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.lunchbox.R
+import com.example.lunchbox.dataclass.SearchingWtihKeywordDataclass
+import com.example.lunchbox.manager.LocationManagement
+import com.example.lunchbox.manager.MapViewEvents
+import com.example.lunchbox.manager.POIEvents
+import com.example.lunchbox.manager.RestAPIClient
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapCircle
@@ -30,20 +29,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
-import kotlin.concurrent.timer
-import kotlin.concurrent.timerTask
 
 
 class MainActivity : AppCompatActivity() {
     var mapview:MapView?=null
     var marker=MapPOIItem()
-    var customPOIEvents:POIEvents?=null
+    var customPOIEvents: POIEvents?=null
     var rangePoint:MapPOIItem?=null
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
-    var myLocationManager:LocationManagement?=null
-    var customMapViewEvents:MapViewEvents?=null
+    var myLocationManager: LocationManagement?=null
+    var customMapViewEvents: MapViewEvents?=null
     var circle:MapCircle?=null
     val clickListener = View.OnClickListener {
         when(it.id){
@@ -54,31 +51,34 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-    val BaseURL:String=getString(R.string.RestAPI_URL)
-    val APIKey=getString(R.string.API_Key)
+
 
     enum class POIItemNumber(val number:Int) {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
     }
 
-    private fun ClientStart(Keyword:String,){
+    private fun ClientStart(Keyword:String,x:Double,y:Double){
+        val baseURL=getString(R.string.restapi_url)
+        val apiKey=getString(R.string.api_key)
+
+
         val retrofit: Retrofit=Retrofit.Builder()
-            .baseUrl(BaseURL).addConverterFactory(GsonConverterFactory.create()).build()
+            .baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build()
         val api=retrofit.create(RestAPIClient::class.java)
-        val call = api.getFromKeyword(APIKey,Keyword,)   // 검색 조건 입력
+        val call = api.getFromKeyword(apiKey,Keyword,x.toString(),y.toString(),"distance")   // 검색 조건 입력
 
         // API 서버에 요청
-        call.enqueue(object: Callback<KeywordSearchData> {
+        call.enqueue(object: Callback<SearchingWtihKeywordDataclass.KeywordSearchData> {
             override fun onResponse(
-                call: Call<KeywordSearchData>,
-                response: Response<KeywordSearchData>
+                call: Call<SearchingWtihKeywordDataclass.KeywordSearchData>,
+                response: Response<SearchingWtihKeywordDataclass.KeywordSearchData>
             ) {
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)
                 Log.d("Test", "Raw: ${response.raw()}")
                 Log.d("Test", "Body: ${response.body()}")
             }
 
-            override fun onFailure(call: Call<KeywordSearchData>, t: Throwable) {
+            override fun onFailure(call: Call<SearchingWtihKeywordDataclass.KeywordSearchData>, t: Throwable) {
                 // 통신 실패
                 Log.w("MainActivity", "통신 실패: ${t.message}")
             }
@@ -114,7 +114,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         resources.getColor(R.color.ThemeColor)
         //전체화면모드 활성화
-
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -129,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         //마커 세팅
         marker=MapPOIItem()
         marker.itemName="Test_Marker"
-        marker.tag=POIItemNumber.PICKMARKER.number
+        marker.tag= POIItemNumber.PICKMARKER.number
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
         marker.markerType=MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
@@ -153,15 +152,15 @@ class MainActivity : AppCompatActivity() {
             mapview?.mapCenterPoint,  // center
             500,  // radius
             ContextCompat.getColor(this, R.color.ThemeColor),
-            ContextCompat.getColor(this,R.color.ThemeSubColor)// fillColor
+            ContextCompat.getColor(this, R.color.ThemeSubColor)// fillColor
         )
-        circle?.tag=POIItemNumber.CIRCLE.number
+        circle?.tag= POIItemNumber.CIRCLE.number
 
         //******드래그 가능한 원의 포인트 세팅******
         rangePoint=MapPOIItem()
         rangePoint?.isDraggable=true
         rangePoint?.markerType=MapPOIItem.MarkerType.CustomImage
-        rangePoint?.customImageResourceId=R.drawable.question
+        rangePoint?.customImageResourceId= R.drawable.question
         rangePoint?.setCustomImageAnchor(0.5f, 0.5f)
         rangePoint?.itemName="rangePoint"
         rangePoint?.tag= POIItemNumber.RANGEPOINT.number

@@ -1,11 +1,7 @@
-package com.example.lunchbox
+package com.example.lunchbox.manager
 
-import android.app.Activity
-import android.content.Context
-import android.graphics.Color
 import android.util.Log
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getColor
+import com.example.lunchbox.activity.MainActivity
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
@@ -16,7 +12,7 @@ import kotlin.concurrent.timer
 
 class POIEvents(val circle: MapCircle,val rangePoint: MapPOIItem):MapView.POIItemEventListener {
     var rangeAppointed=false
-    var DistanceManager=DistanceManager()
+    var DistanceManager= DistanceManager()
     var PinPoint:MapPOIItem?=null
     var thread: Timer?=null//Thread?=null
     var PrevLocationX=0.0
@@ -79,7 +75,7 @@ class POIEvents(val circle: MapCircle,val rangePoint: MapPOIItem):MapView.POIIte
     }
 
     override fun onPOIItemSelected(p0: MapView?, p1: MapPOIItem?) {
-        if(p1?.tag==MainActivity.POIItemNumber.PICKMARKER.number){
+        if(p1?.tag== MainActivity.POIItemNumber.PICKMARKER.number){
 
             PinPoint=p1
             rangePoint.mapPoint= MapPoint.mapPointWithScreenLocation(
@@ -95,7 +91,7 @@ class POIEvents(val circle: MapCircle,val rangePoint: MapPOIItem):MapView.POIIte
         }
 
         //RangePoint 클릭하면 로그.
-        if (p1?.tag==MainActivity.POIItemNumber.RANGEPOINT.number){
+        if (p1?.tag== MainActivity.POIItemNumber.RANGEPOINT.number){
             Log.e("Guys","RangePoint is selected")
             CirclePainter(p0,p1)
         }

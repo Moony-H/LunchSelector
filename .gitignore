@@ -13,4 +13,4 @@
 .externalNativeBuild
 .cxx
 privateKeys.xml
-/app/src/main/res/values/privateKeys.xml
+/app/src/main/res/values/privatekeys.xml

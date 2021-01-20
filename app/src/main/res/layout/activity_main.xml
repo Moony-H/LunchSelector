@@ -16,11 +16,12 @@
         android:layout_marginTop="35dp"
         android:width="350dp"
         android:height="60dp"
-        android:autofillHints=""
+        android:autofillHints="장소 검색"
         android:background="@drawable/horizontal_long_button"
         android:queryHint="장소 검색"
         android:visibility="visible"
-        android:id="@+id/LocationSearchBar">
+        android:id="@+id/LocationSearchView"
+        android:iconifiedByDefault="false">
 
     </SearchView>
 

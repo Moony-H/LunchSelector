@@ -12,7 +12,9 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.ImageView
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -46,8 +48,8 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
-
     }
+
 
     enum class POIItemNumber(val number:Int) {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
@@ -81,8 +83,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         resources.getColor(R.color.ThemeColor)
         //전체화면모드 활성화
-        window.decorView.systemUiVisibility=(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
 
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
         //맵을 뷰에 추가
         val viewGroup = Main_layout
         mapview=MapView(this)
@@ -108,7 +112,7 @@ class MainActivity : AppCompatActivity() {
 
         //버튼과 검색 바 앞으로
         myLocationButton.bringToFront()
-        LocationSearchBar.bringToFront()
+        LocationSearchView.bringToFront()
 
 
         //써클의 기본 세팅
@@ -141,6 +145,23 @@ class MainActivity : AppCompatActivity() {
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
 
+        //SearchView 리스너 세팅
+        LocationSearchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
+            override fun onQueryTextChange(newText: String?): Boolean {
+
+
+
+                return false
+            }
+
+            override fun onQueryTextSubmit(query: String?): Boolean {
+
+
+
+                return false
+            }
+
+        })
     }
 
 

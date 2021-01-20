@@ -11,12 +11,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapView
 import java.util.jar.Manifest
 
-private var backKeyPressedTime:Long=0
+
 
 
 class OptionActivity : AppCompatActivity() {
 
-
+    private var backKeyPressedTime:Long=0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

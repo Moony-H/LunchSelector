@@ -13,7 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lunchbox.R
 import com.example.lunchbox.dataclass.SearchingWtihKeywordDataclass
-import com.example.lunchbox.manager.LocationManagement
+import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
 import com.example.lunchbox.manager.RestAPIClient
@@ -39,7 +39,7 @@ class MainActivity : AppCompatActivity() {
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
-    var myLocationManager: LocationManagement?=null
+    var myLocationManager: LocationManager?=null
     var customMapViewEvents: MapViewEvents?=null
     var circle:MapCircle?=null
     val clickListener = View.OnClickListener {
@@ -137,7 +137,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //위치추적 매니저 생성.
-        myLocationManager= LocationManagement(this)
+        myLocationManager= LocationManager(this)
 
         //맵 이벤트 생성
         customMapViewEvents= MapViewEvents( myLocationManager!!,marker)

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="30dp"
+        android:layout_marginTop="35dp"
+        android:width="350dp"
+        android:height="60dp"
+        android:autofillHints="장소 검색"
+        android:background="@drawable/horizontal_long_button"
+        android:queryHint="장소 검색"
+        android:visibility="visible"
+        android:id="@+id/LocationSearchView"
+        android:iconifiedByDefault="false"/>
+    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="30dp"
+        android:layout_marginHorizontal="30dp">
+
+    </view>
+
+</LinearLayout>

@@ -19,24 +19,8 @@ import com.example.lunchbox.R
 import java.lang.NullPointerException
 
 
-interface  LocationInter{
 
-    fun CheckLocationPermission():Boolean
-    fun LocationListenerSetting()
-    fun LocationUpdateSetting(msec:Long, meter: Float)
-    fun StopLocationListener()
-
-
-}
-
-class LocationManagement (val ActivityToUse: Activity):LocationInter{
-
-
-
-
-
-
-
+class LocationManager (val ActivityToUse: Activity){
 
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
@@ -58,7 +42,7 @@ class LocationManagement (val ActivityToUse: Activity):LocationInter{
 
 
 
-    override fun CheckLocationPermission():Boolean{
+    fun CheckLocationPermission():Boolean{
         if (ActivityCompat.checkSelfPermission(
                 ActivityToUse,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -81,7 +65,7 @@ class LocationManagement (val ActivityToUse: Activity):LocationInter{
 
 
    @SuppressLint("MissingPermission")
-   override fun LocationListenerSetting()
+   fun LocationListenerSetting()
    {
 
        CheckLocationPermission()
@@ -131,7 +115,7 @@ class LocationManagement (val ActivityToUse: Activity):LocationInter{
    }
 
     @SuppressLint("MissingPermission")
-    override fun LocationUpdateSetting(msec:Long, meter: Float) {
+    fun LocationUpdateSetting(msec:Long, meter: Float) {
         CheckLocationPermission()
         isGPSEnabled= myLocationManager!!.isProviderEnabled(LocationManager.GPS_PROVIDER)
         isNetworkEnabled= myLocationManager!!.isProviderEnabled(LocationManager.NETWORK_PROVIDER)
@@ -151,7 +135,7 @@ class LocationManagement (val ActivityToUse: Activity):LocationInter{
 
 
 
-    override fun StopLocationListener() {
+    fun StopLocationListener() {
         myLocationManager?.removeUpdates(locationListener)
     }
 

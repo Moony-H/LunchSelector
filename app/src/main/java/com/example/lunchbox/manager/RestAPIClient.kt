@@ -1,6 +1,6 @@
 package com.example.lunchbox.manager
 
-import com.example.lunchbox.dataclass.SearchingWtihKeywordDataclass
+import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -14,8 +14,6 @@ interface RestAPIClient{
         @Query("x") x:String,
         @Query("x") y:String,
         @Query("sort") sort:String
-    ): Call<SearchingWtihKeywordDataclass.KeywordSearchData>
+    ): Call<SearchingWithKeywordDataclass>
 }
-
-
 

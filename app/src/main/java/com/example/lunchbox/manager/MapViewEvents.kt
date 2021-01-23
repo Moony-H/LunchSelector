@@ -10,7 +10,7 @@ import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(val myLocationManager: LocationManagement,val marker:MapPOIItem): MapView.MapViewEventListener {
+class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener {
     var timer: Timer? = null
     var allStop = false
     var mapview:MapView?=null

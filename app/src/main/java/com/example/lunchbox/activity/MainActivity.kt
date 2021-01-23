@@ -12,7 +12,7 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lunchbox.R
-import com.example.lunchbox.dataclass.SearchingWtihKeywordDataclass
+import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
@@ -68,17 +68,17 @@ class MainActivity : AppCompatActivity() {
         val call = api.getFromKeyword(apiKey,Keyword,x.toString(),y.toString(),"distance")   // 검색 조건 입력
 
         // API 서버에 요청
-        call.enqueue(object: Callback<SearchingWtihKeywordDataclass.KeywordSearchData> {
+        call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
             override fun onResponse(
-                call: Call<SearchingWtihKeywordDataclass.KeywordSearchData>,
-                response: Response<SearchingWtihKeywordDataclass.KeywordSearchData>
+                call: Call<SearchingWithKeywordDataclass>,
+                response: Response<SearchingWithKeywordDataclass>
             ) {
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)
                 Log.d("Test", "Raw: ${response.raw()}")
                 Log.d("Test", "Body: ${response.body()}")
             }
 
-            override fun onFailure(call: Call<SearchingWtihKeywordDataclass.KeywordSearchData>, t: Throwable) {
+            override fun onFailure(call: Call<SearchingWithKeywordDataclass>, t: Throwable) {
                 // 통신 실패
                 Log.w("MainActivity", "통신 실패: ${t.message}")
             }
@@ -205,9 +205,9 @@ class MainActivity : AppCompatActivity() {
 
 
         //위치 권한 체크 밑 위치추적 활성화
-        if(myLocationManager!!.CheckLocationPermission()){
-            myLocationManager?.LocationListenerSetting()
-            myLocationManager?.LocationUpdateSetting(5000,0.1f)
+        if(myLocationManager!!.checkLocationPermission()){
+            myLocationManager?.locationListenerSetting()
+            myLocationManager?.locationUpdateSetting(5000,0.1f)
         }
 
 

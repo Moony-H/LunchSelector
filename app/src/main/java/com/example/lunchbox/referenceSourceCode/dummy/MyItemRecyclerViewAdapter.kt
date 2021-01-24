@@ -1,4 +1,4 @@
-package com.example.lunchbox.fragment
+package com.example.lunchbox.referenceSourceCode.dummy
 
 import androidx.recyclerview.widget.RecyclerView
 import android.view.LayoutInflater
@@ -6,9 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import com.example.lunchbox.R
-import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 
-import com.example.lunchbox.fragment.dummy.DummyContent.DummyItem
+import com.example.lunchbox.referenceSourceCode.dummy.DummyContent.DummyItem
 
 /**
  * [RecyclerView.Adapter] that can display a [DummyItem].

@@ -7,12 +7,13 @@ import retrofit2.http.Header
 import retrofit2.http.Query
 
 interface RestAPIClient{
-    @GET("/v2/local/search/keyword.json")
+    @GET("v2/local/search/keyword.json")
     fun getFromKeyword(
         @Header("Authorization") key:String,
         @Query("query") Keyword:String,
-        @Query("x") x:String,
-        @Query("x") y:String,
+        @Query("x") x:Double,
+        @Query("x") y:Double,
+        @Query("radius") radius:Int,
         @Query("sort") sort:String
     ): Call<SearchingWithKeywordDataclass>
 }

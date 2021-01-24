@@ -1,4 +1,4 @@
-package com.example.lunchbox.fragment
+package com.example.lunchbox.referenceSourceCode.dummy
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -9,7 +9,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.example.lunchbox.R
-import com.example.lunchbox.fragment.dummy.DummyContent
 
 /**
  * A fragment representing a list of Items.

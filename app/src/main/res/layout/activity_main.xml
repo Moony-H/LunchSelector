@@ -1,46 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
-    android:id="@+id/Main_layout">
-
-
-
-    <SearchView
+    android:layout_height="match_parent">
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginHorizontal="30dp"
-        android:layout_marginTop="35dp"
-        android:width="350dp"
-        android:height="60dp"
-        android:autofillHints="장소 검색"
-        android:background="@drawable/horizontal_long_button"
-        android:queryHint="장소 검색"
-        android:visibility="visible"
-        android:id="@+id/LocationSearchView"
-        android:iconifiedByDefault="false">
-
-    </SearchView>
-
-    <ImageButton
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:background="@drawable/horizontal_long_button"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginBottom="45dp"
-        android:layout_marginRight="30dp"
-        android:id="@+id/myLocationButton"
-        android:src="@drawable/mylocation"
-        android:scaleType="centerCrop"
-        >
-
-    </ImageButton>
+        android:layout_height="match_parent"
+        tools:context=".activity.MainActivity"
+        android:id="@+id/Main_layout">
 
 
 
+        <SearchView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="35dp"
+            android:width="350dp"
+            android:height="60dp"
+            android:autofillHints="장소 검색"
+            android:background="@drawable/horizontal_long_button"
+            android:queryHint="장소 검색"
+            android:visibility="visible"
+            android:id="@+id/LocationSearchView"
+            android:iconifiedByDefault="false">
+
+        </SearchView>
+
+        <ImageButton
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/horizontal_long_button"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginBottom="45dp"
+            android:layout_marginRight="30dp"
+            android:id="@+id/myLocationButton"
+            android:src="@drawable/mylocation"
+            android:scaleType="centerCrop"
+            >
+
+        </ImageButton>
+    <com.google.android.material.navigation.NavigationView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+        <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/Search_list"
+            android:name="com.example.lunchbox.fragment.AddressSearchFragment"
+            android:layout_gravity="left"
+            ></fragment>
+
+    </com.google.android.material.navigation.NavigationView>
 
 
 
@@ -49,4 +61,7 @@
 
 
 
-</RelativeLayout>
+
+
+    </RelativeLayout>
+</androidx.drawerlayout.widget.DrawerLayout>

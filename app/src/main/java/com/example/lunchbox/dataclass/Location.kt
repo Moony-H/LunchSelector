@@ -1,6 +1,7 @@
 package com.example.lunchbox.dataclass
 
-data class Location (
-    val x:Double,
-    val y:Double
+
+ object data class Location (
+    var x:Double,
+    var y:Double
         )

@@ -57,33 +57,7 @@ class MainActivity : AppCompatActivity() {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
     }
 
-    private fun ClientStart(Keyword:String,x:Double,y:Double){
-        val baseURL=getString(R.string.restapi_url)
-        val apiKey=getString(R.string.api_key)
 
-
-        val retrofit: Retrofit=Retrofit.Builder()
-            .baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build()
-        val api=retrofit.create(RestAPIClient::class.java)
-        val call = api.getFromKeyword(apiKey,Keyword,x.toString(),y.toString(),"distance")   // 검색 조건 입력
-
-        // API 서버에 요청
-        call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
-            override fun onResponse(
-                call: Call<SearchingWithKeywordDataclass>,
-                response: Response<SearchingWithKeywordDataclass>
-            ) {
-                // 통신 성공 (검색 결과는 response.body()에 담겨있음)
-                Log.d("Test", "Raw: ${response.raw()}")
-                Log.d("Test", "Body: ${response.body()}")
-            }
-
-            override fun onFailure(call: Call<SearchingWithKeywordDataclass>, t: Throwable) {
-                // 통신 실패
-                Log.w("MainActivity", "통신 실패: ${t.message}")
-            }
-        })
-    }
 
 
 
@@ -117,6 +91,9 @@ class MainActivity : AppCompatActivity() {
         window.setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN)
+
+
+        //위치 데이터 리스트
 
 
         //맵을 뷰에 추가

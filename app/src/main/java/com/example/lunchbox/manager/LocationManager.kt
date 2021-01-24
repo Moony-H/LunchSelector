@@ -35,6 +35,7 @@ class LocationManager (val ActivityToUse: Activity){
         override fun onLocationChanged(location:Location){
             longitude=location.longitude
             latitude=location.latitude
+
         }
 
         override fun onProviderDisabled(provider: String) { super.onProviderDisabled(provider) }//제공자가 멈췄을 때
@@ -86,6 +87,7 @@ class LocationManager (val ActivityToUse: Activity){
            else {
                longitude = location?.longitude// 다 갠차느면 로케이션 업데이트.
                latitude = location?.latitude
+
            }
        }
        else if(isNetworkEnabled){

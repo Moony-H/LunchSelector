@@ -3,6 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+
     >
     <SearchView
         android:id="@+id/LocationSearchView"
@@ -17,12 +18,10 @@
         android:queryHint="장소 검색"
         android:visibility="visible"
         android:iconifiedByDefault="false"/>
-    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/Searched_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="30dp"
-        android:layout_marginHorizontal="30dp">
+        android:layout_height="match_parent" />
 
-    </view>
 
 </LinearLayout>

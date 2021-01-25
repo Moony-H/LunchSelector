@@ -10,11 +10,11 @@ interface RestAPIClient{
     @GET("v2/local/search/keyword.json")
     fun getFromKeyword(
         @Header("Authorization") key:String,
-        @Query("query") Keyword:String,
-        @Query("x") x:Double,
-        @Query("x") y:Double,
-        @Query("radius") radius:Int,
-        @Query("sort") sort:String
+        @Query("query") Keyword:String//,
+        //@Query("x") x:Double,
+        //@Query("x") y:Double,
+        //@Query("radius") radius:Int,
+        //@Query("sort") sort:String
     ): Call<SearchingWithKeywordDataclass>
 }
 

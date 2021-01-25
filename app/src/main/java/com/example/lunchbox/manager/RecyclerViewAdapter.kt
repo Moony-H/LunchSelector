@@ -1,5 +1,6 @@
 package com.example.lunchbox.manager
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,7 +14,8 @@ class RecyclerViewAdapter (private val searchedData: SearchingWithKeywordDatacla
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.fragment_item, parent, false)
+            .inflate(R.layout.item_recycle, parent, false)
+        Log.d("onCreate","done")
 
         return ViewHolder(view)
     }
@@ -21,6 +23,7 @@ class RecyclerViewAdapter (private val searchedData: SearchingWithKeywordDatacla
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
 
         val item =searchedData.documents[position]
+        Log.d("searchedData",searchedData.documents[1].place_name)
         holder.placeName.text = item.place_name
         holder.address.text = item.road_address_name
     }
@@ -29,8 +32,8 @@ class RecyclerViewAdapter (private val searchedData: SearchingWithKeywordDatacla
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        val placeName: TextView = view.findViewById(R.id.item_number)
-        val address: TextView = view.findViewById(R.id.content)
+        val placeName: TextView = view.findViewById(R.id.place_title)
+        val address: TextView = view.findViewById(R.id.place_address)
 
     }
 

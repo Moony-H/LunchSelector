@@ -36,16 +36,26 @@ class AddressSearchFragment:Fragment() {
             .baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build()
         val api=retrofit.create(RestAPIClient::class.java)
         //val call = api.getFromKeyword(apiKey,Keyword,x.toString(),y.toString(),"distance")   // 검색 조건 입력
-        val call = api.getFromKeyword(apiKey,Keyword,x,y,20000,"distance")
+        val call = api.getFromKeyword(apiKey,Keyword)//,x,y,20000,"distance")
         // API 서버에 요청
         call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
             override fun onResponse(
                 call: Call<SearchingWithKeywordDataclass>,
                 response: Response<SearchingWithKeywordDataclass>
             ) {
-                if(view is RecyclerView){
-                    view.layoutManager=LinearLayoutManager(context)
-                    view.adapter= response.body()?.let{RecyclerViewAdapter(it)}
+                val recyclerView=view.findViewById<RecyclerView>(R.id.Searched_list)
+                if(recyclerView is RecyclerView){
+                    Log.e("View is","RecyclerView")
+                    response.body()?.let {
+                        val myRecyclerViewAdapter=RecyclerViewAdapter(it)
+                        myRecyclerViewAdapter.notifyDataSetChanged()
+                        recyclerView.layoutManager=LinearLayoutManager(context)
+                        recyclerView.adapter= myRecyclerViewAdapter
+                    }
+
+                }
+                else{
+                    Log.e("View is","not RecyclerView")
                 }
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)
                 Log.d("Test", "Raw: ${response.raw()}")

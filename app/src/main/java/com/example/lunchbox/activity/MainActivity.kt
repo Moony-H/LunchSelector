@@ -121,7 +121,7 @@ class MainActivity : AppCompatActivity() {
 
         //버튼과 검색 바 앞으로
         myLocationButton.bringToFront()
-        LocationSearchView.bringToFront()
+        //LocationSearchView.bringToFront()
 
 
         //써클의 기본 세팅
@@ -155,22 +155,7 @@ class MainActivity : AppCompatActivity() {
         myLocationButton.setOnClickListener(clickListener)
 
         //SearchView 리스너 세팅
-        LocationSearchView.setOnQueryTextListener(object :SearchView.OnQueryTextListener{
-            override fun onQueryTextChange(newText: String?): Boolean {
 
-
-
-                return false
-            }
-
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-
-
-                return true
-            }
-
-        })
     }
 
 

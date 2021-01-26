@@ -7,6 +7,6 @@
     <color name="myLocationColor">#2196F3</color>
     <color name="ThemeColor">#66F39A17</color>
     <color name="ThemeSubColor">#66F46C40</color>
-    <color name="colorGray">#2B2B2B</color>
+    <color name="colorGray">#DFDFDF</color>
     <color name="black">#000000</color>
 </resources>

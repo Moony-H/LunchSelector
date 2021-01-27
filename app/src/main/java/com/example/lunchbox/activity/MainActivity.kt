@@ -1,6 +1,7 @@
 package com.example.lunchbox.activity
 
 
+import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 
@@ -32,6 +33,7 @@ import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
+    private var isFragmentOpened=false
     var mapview:MapView?=null
     var marker=MapPOIItem()
     var customPOIEvents: POIEvents?=null
@@ -44,14 +46,33 @@ class MainActivity : AppCompatActivity() {
     var circle:MapCircle?=null
     val clickListener = View.OnClickListener {
         when(it.id){
-            myLocationButton.id->{Log.e("Location","Location Button Downed")
+            myLocationButton.id-> {
+                Log.e("Location", "Location Button Downed")
                 customMapViewEvents?.timer?.cancel()
                 customMapViewEvents?.StartTracking()
-
             }
+            search_button.id->{
+                Log.d("Button","Search_Button Downed")
+                fragmentAnim()
+                }
         }
+
     }
 
+    private fun fragmentAnim(){
+        if(isFragmentOpened)
+        {
+            ObjectAnimator.ofFloat(Search_Frame,"TranslationX",-150f).apply { duration=1000
+                start()}
+            isFragmentOpened=true
+        }
+        else{
+            ObjectAnimator.ofFloat(Search_Frame,"TranslationX",500f).apply { duration=1000
+                start()}
+            isFragmentOpened=true
+        }
+
+    }
 
     enum class POIItemNumber(val number:Int) {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
@@ -97,7 +118,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //맵을 뷰에 추가
-        val viewGroup = Main_layout
+        val viewGroup = Map_layout
         mapview=MapView(this)
         viewGroup.addView(mapview)
 
@@ -119,9 +140,7 @@ class MainActivity : AppCompatActivity() {
         //맵 이벤트 생성
         customMapViewEvents= MapViewEvents( myLocationManager!!,marker)
 
-        //버튼과 검색 바 앞으로
-        myLocationButton.bringToFront()
-        //LocationSearchView.bringToFront()
+
 
 
         //써클의 기본 세팅
@@ -153,6 +172,7 @@ class MainActivity : AppCompatActivity() {
 
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
+        search_button.setOnClickListener(clickListener)
 
         //SearchView 리스너 세팅
 

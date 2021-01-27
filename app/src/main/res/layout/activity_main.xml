@@ -1,45 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <RelativeLayout
+   >
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activity.MainActivity"
-        android:id="@+id/Main_layout">
+        android:id="@+id/Map_layout"
+        android:background="@color/colorWhite">
 
+    </FrameLayout>
+    <ImageButton
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/horizontal_long_button"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="45dp"
+        android:layout_marginRight="30dp"
+        android:id="@+id/myLocationButton"
+        android:src="@drawable/mylocation"
+        android:scaleType="centerCrop"
+        >
+    </ImageButton>
+    <ImageButton
+        android:id="@+id/search_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginLeft="45dp"
+        android:background="@drawable/horizontal_long_button"
+        android:src="@drawable/finder_left"
+        android:scaleType="centerCrop"
+        >
 
-        <ImageButton
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/horizontal_long_button"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_marginBottom="45dp"
-            android:layout_marginRight="30dp"
-            android:id="@+id/myLocationButton"
-            android:src="@drawable/mylocation"
-            android:scaleType="centerCrop"
-            >
-        </ImageButton>
-    </RelativeLayout>
+    </ImageButton>
 
-    <com.google.android.material.navigation.NavigationView
-        android:layout_width="wrap_content"
+    <FrameLayout
+        android:layout_width="200dp"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
+        android:layout_alignParentLeft="true"
+        android:layout_marginLeft="-200dp"
+        android:id="@+id/Search_Frame"
+        android:background="@color/ThemeColor"
         >
         <fragment
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/Search_list"
             android:name="com.example.lunchbox.fragment.AddressSearchFragment"
-            android:layout_gravity="left"
-            />
+            ></fragment>
 
-    </com.google.android.material.navigation.NavigationView>
+    </FrameLayout>
 
 
-</androidx.drawerlayout.widget.DrawerLayout>
+
+
+</RelativeLayout>

@@ -1,4 +1,13 @@
 <resources>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="text_margin">16dp</dimen>
+
+    <!-- Text Size -->
+    <dimen name="main_text">20dp</dimen>
+    <dimen name="sub_text">10dp</dimen>
+    <dimen name="main_title">100dp</dimen>
+    <dimen name="sub_title">70dp</dimen>
+
+    <!-- Image Size -->
+    <dimen name="main_image">150dp</dimen>
 </resources>

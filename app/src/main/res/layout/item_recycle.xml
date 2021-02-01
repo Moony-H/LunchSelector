@@ -12,11 +12,12 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="null"
-        android:autoSizeTextType="uniform"
+        android:textSize="@dimen/main_text"
         android:layout_weight="6"
-        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
         android:background="@color/colorWhite"
-        android:layout_marginBottom="1dp"
+        android:textStyle="bold"
         >
 
     </TextView>
@@ -25,9 +26,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="null"
-        android:autoSizeTextType="uniform"
+        android:textSize="@dimen/sub_text"
         android:layout_weight="3"
-        android:gravity="center"
+        android:paddingLeft="10dp"
+        android:gravity="center_vertical"
         android:background="@color/colorWhite"
         android:layout_marginBottom="1dp"
         >

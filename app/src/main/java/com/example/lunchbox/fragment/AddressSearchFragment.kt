@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchbox.R
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.manager.RecyclerViewAdapter
-import com.example.lunchbox.manager.RestAPIClient
 import kotlinx.android.synthetic.main.fragment_search_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,6 +23,8 @@ class AddressSearchFragment:Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {  }
+
+
     }
 
     private fun clientStart(view:View,Keyword:String,x:Double,y:Double){
@@ -36,7 +36,7 @@ class AddressSearchFragment:Fragment() {
             .baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build()
         val api=retrofit.create(RestAPIClient::class.java)
         //val call = api.getFromKeyword(apiKey,Keyword,x.toString(),y.toString(),"distance")   // 검색 조건 입력
-        val call = api.getFromKeyword(apiKey,Keyword)//,x,y,20000,"distance")
+        val call = api.getFromKeyword(apiKey,Keyword,126.9784147,37.5666805,"distance")
         // API 서버에 요청
         call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
             override fun onResponse(
@@ -71,6 +71,9 @@ class AddressSearchFragment:Fragment() {
     override fun onCreateView( inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view=inflater.inflate(R.layout.fragment_search_list,container,false)
 
+        //리사이클러뷰 세팅
+        val recyclerView:RecyclerView=Searched_list
+        recyclerView.layoutManager= LinearLayoutManager(context)
         view.findViewById<SearchView>(R.id.LocationSearchView).setOnQueryTextListener(object :SearchView.OnQueryTextListener{
 
             override fun onQueryTextSubmit(query: String?): Boolean {

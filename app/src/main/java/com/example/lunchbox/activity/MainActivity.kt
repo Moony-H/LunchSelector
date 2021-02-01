@@ -8,28 +8,18 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
-import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lunchbox.R
-import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
-import com.example.lunchbox.manager.RestAPIClient
-import kotlinx.android.synthetic.main.activity_intro.*
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import java.util.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -53,26 +43,19 @@ class MainActivity : AppCompatActivity() {
             }
             search_button.id->{
                 Log.d("Button","Search_Button Downed")
-                fragmentAnim()
+                if(!isFragmentOpened)
+                {
+                    ObjectAnimator.ofFloat(Search_Frame,"TranslationX",500f).apply { duration=1000
+                        start()}
+                    isFragmentOpened=true
                 }
+            }
+
         }
 
     }
 
-    private fun fragmentAnim(){
-        if(isFragmentOpened)
-        {
-            ObjectAnimator.ofFloat(Search_Frame,"TranslationX",-150f).apply { duration=1000
-                start()}
-            isFragmentOpened=true
-        }
-        else{
-            ObjectAnimator.ofFloat(Search_Frame,"TranslationX",500f).apply { duration=1000
-                start()}
-            isFragmentOpened=true
-        }
 
-    }
 
     enum class POIItemNumber(val number:Int) {
         PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
@@ -88,17 +71,25 @@ class MainActivity : AppCompatActivity() {
     override fun onBackPressed() {
         //super.onBackPressed()
         var toast:Toast?
-        if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
-            backKeyPressedTime = System.currentTimeMillis()
-            toast = Toast.makeText(this, "뒤로 가기 버튼을 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG)
-            toast.show()
-            return
+        if(isFragmentOpened)
+        {
+            isFragmentOpened=false
+            ObjectAnimator.ofFloat(Search_Frame,"TranslationX",-500f).apply { duration=1000
+                start()}
         }
+        else {
+            if (System.currentTimeMillis() > backKeyPressedTime + 2500) {
+                backKeyPressedTime = System.currentTimeMillis()
+                toast = Toast.makeText(this, "뒤로 가기 버튼을 한 번 더 누르시면 종료됩니다.", Toast.LENGTH_LONG)
+                toast.show()
+                return
+            }
 
-        if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
-            ActivityCompat.finishAffinity(this)
+            if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
+                ActivityCompat.finishAffinity(this)
 
-            System.exit(0)
+                System.exit(0)
+            }
         }
     }
 
@@ -173,7 +164,7 @@ class MainActivity : AppCompatActivity() {
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
         search_button.setOnClickListener(clickListener)
-
+        Map_layout.setOnClickListener(clickListener)
         //SearchView 리스너 세팅
 
     }

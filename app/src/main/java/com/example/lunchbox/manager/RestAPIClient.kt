@@ -12,17 +12,18 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class RestAPIClient(baseURL: String) {
-    val retrofit: Retrofit = Retrofit.Builder()
+class RestAPIClient() {
+    private val baseURL="https://dapi.kakao.com/"
+    private val retrofit: Retrofit = Retrofit.Builder()
         .baseUrl(baseURL).addConverterFactory(GsonConverterFactory.create()).build()
-    val api=retrofit.create(RestAPIClientInterface::class.java)
+    private val api=retrofit.create(RestAPIClientInterface::class.java)
 
 
 
 
 
 
-    fun getFromKeyword(recyclerView: RecyclerView, Keyword:String, x:Double, y:Double,apiKey:String){
+    fun getFromKeyword(Keyword:String, x:Double, y:Double,apiKey:String,doing:(SearchingWithKeywordDataclass)->Unit){
 
         val call = api.getFromKeyword(apiKey,Keyword,x,y,"distance")
         call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
@@ -32,12 +33,8 @@ class RestAPIClient(baseURL: String) {
             ) {
 
 
-                Log.e("View is","RecyclerView")
                 response.body()?.let {
-                //val myRecyclerViewAdapter=RecyclerViewAdapter(it)
-                //myRecyclerViewAdapter.notifyDataSetChanged()
-                //recyclerView.layoutManager= LinearLayoutManager(context)
-                //recyclerView.adapter= myRecyclerViewAdapter
+                    doing(it)
                 }
 
                 // 통신 성공 (검색 결과는 response.body()에 담겨있음)

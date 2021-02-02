@@ -11,6 +11,7 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.lunchbox.R
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
@@ -34,12 +35,11 @@ class MainActivity : AppCompatActivity() {
     var myLocationManager: LocationManager?=null
     var customMapViewEvents: MapViewEvents?=null
     var circle:MapCircle?=null
-    val clickListener = View.OnClickListener {
+    private val clickListener = View.OnClickListener {
         when(it.id){
             myLocationButton.id-> {
                 Log.e("Location", "Location Button Downed")
-                customMapViewEvents?.timer?.cancel()
-                customMapViewEvents?.StartTracking()
+                customMapViewEvents?.goToMyLocation()
             }
             search_button.id->{
                 Log.d("Button","Search_Button Downed")
@@ -157,8 +157,10 @@ class MainActivity : AppCompatActivity() {
         customPOIEvents= POIEvents(circle!!, rangePoint!!)
 
 
-
-
+        //프래그먼트에 맵뷰 주기.
+        val bundle=Bundle(1)
+        bundle.putSerializable("mapview",customMapViewEvents)
+        search_fragment.arguments=bundle
 
 
         //버튼 리스너 세팅

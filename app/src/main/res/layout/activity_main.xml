@@ -45,6 +45,7 @@
         android:background="@color/ThemeColor"
         >
         <fragment
+            android:id="@+id/search_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:name="com.example.lunchbox.fragment.AddressSearchFragment"

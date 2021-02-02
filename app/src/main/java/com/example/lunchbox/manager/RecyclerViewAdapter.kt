@@ -13,15 +13,15 @@ import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     private var searchedData:SearchingWithKeywordDataclass?=null
-    private var onViewHolderClicked:(()->Unit)?=null
+    private var onViewHolderClicked:(()->Place)?=null
 
     //데이터만 표시
-    constructor(searchedData: SearchingWithKeywordDataclass) : this() {
+    constructor(searchedData: SearchingWithKeywordDataclass?) : this() {
         this.searchedData=searchedData
     }
 
     //데이터랑 데이터 클릭 했을 시 사용
-    constructor(searchedData: SearchingWithKeywordDataclass,onViewHolderClicked:()->Unit) : this(searchedData) {
+    constructor(searchedData: SearchingWithKeywordDataclass?,onViewHolderClicked:()->Place) : this(searchedData) {
         this.searchedData=searchedData
         this.onViewHolderClicked=onViewHolderClicked
     }
@@ -38,7 +38,7 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         searchedData?.let{
-            val item = searchedData!!.documents[position]
+            val item = it.documents[position]
             holder.placeName.text = item.place_name
             holder.address.text = item.road_address_name
         }
@@ -48,6 +48,8 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
     override fun getItemCount(): Int{
         return searchedData?.documents?.size ?: 0
     }
+
+
 
 
     inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {

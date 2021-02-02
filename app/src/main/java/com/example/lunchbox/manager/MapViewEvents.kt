@@ -5,115 +5,138 @@ import android.util.Log
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
+import java.io.Serializable
 import java.util.*
 import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener {
+class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener,
+    Serializable {
     var timer: Timer? = null
-    var allStop = false
+    var isTracking=true
     var mapview:MapView?=null
+    var goalMapPoint:MapPoint?= null
+    var goalLocationLatitude:Double=0.0
+    var goalLocationLongitude:Double=0.0
 
 
 
-    private fun GoToMyLocation(Point:MapPoint=MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude)) {
-        mapview?.setMapCenterPoint(Point,true)
+
+    //외부에서 사용할 내 위치로 이동 버튼
+    fun goToMyLocation(){
+        isTracking=true
+        setMyLocation()
+        goToLocation()
+        initPin()
+    }
+
+
+    //설정된 위치로 이동.
+    private fun goToLocation(){
+        mapview?.setMapCenterPoint(goalMapPoint,true)
 
     }
-    fun StopTracking(){allStop=true}
 
-    fun StartTracking(){
-        allStop=false
-        GoToMyLocation()
+    //현재 사용자의 실제 위치로 변경
+    private fun setMyLocation() {
+        setGoalLocation(MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude))
+    }
+
+
+    //사용자가 원하는 위치로 변경
+    private fun setGoalLocation(mapPoint: MapPoint){
+        goalMapPoint=mapPoint
+    }
+
+
+
+
+
+    private fun initTimer(){
+
+        timer?.cancel()
+        timerStart()
+
+    }
+
+    private fun initPin(){
         mapview?.removePOIItem(marker)
-        CreatePin()
-        TimerStart()
-
-    }
-
-    private fun CheckStop(){
-        if (!allStop) {
-            timer?.cancel()
-            TimerStart()
-        }
-    }
-
-    private fun CreatePin(){
-        marker.mapPoint = MapPoint.mapPointWithGeoCoord(
-            myLocationManager.latitude,
-            myLocationManager.longitude
-        )
+        marker.mapPoint = goalMapPoint
         mapview?.addPOIItem(marker)
     }
 
-    private fun TimerStart() {
+    private fun timerStart() {
 
         timer = timer(period = 3000, initialDelay = 3000) {
-            GoToMyLocation()
-            mapview?.removePOIItem(marker)
-            CreatePin()
-            for (i in mapview?.poiItems!!){
-                Log.e("HEYing","${i.tag}")
+            if(isTracking){
+                setMyLocation()
             }
+            goToLocation()
+            initPin()
+
                 //Log.e("Map", "${myLocationManager.latitude} ${myLocationManager.longitude}")
         }
 
 
     }
 
+    override fun onMapViewInitialized(p0: MapView?) {
+        Log.e("Map", "Initialized")
+        mapview=p0
+        setGoalLocation(MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude))
+        goToLocation()
+        timerStart()
+        initPin()
+
+    }
+
     override fun onMapViewSingleTapped(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Tuched")
-        timer?.cancel()
-        StopTracking()
-        marker.mapPoint=p1
-        p0?.removePOIItem(marker)
-        p0?.addPOIItem(marker)
-        GoToMyLocation(marker.mapPoint)
+        isTracking=false
+        if (p1 != null) {
+            setGoalLocation(p1)
+        }
+        initPin()
+        goToLocation()
+        initTimer()
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Double_Tapped")
-        CheckStop()
 
     }
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Drag_Start")
-        CheckStop()
+        timer?.cancel()
 
     }
 
     override fun onMapViewDragEnded(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Drag End")
-        CheckStop()
+        initTimer()
     }
 
     override fun onMapViewMoveFinished(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Map_Move_Finished")
-        CheckStop()
     }
 
     override fun onMapViewCenterPointMoved(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Center_Moved")
-        CheckStop()
+        //initTimer()
     }
 
 
-    override fun onMapViewInitialized(p0: MapView?) {
-        Log.e("Map", "Initialized")
-        mapview=p0
-        StartTracking()
 
-    }
 
     override fun onMapViewLongPressed(p0: MapView?, p1: MapPoint?) {
-        CheckStop()
+        initTimer()
         Log.e("Map","LongPressed")
     }
 
 
     override fun onMapViewZoomLevelChanged(p0: MapView?, p1: Int) {
-        CheckStop()
+        initTimer()
     }
 }

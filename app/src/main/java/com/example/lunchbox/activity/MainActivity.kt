@@ -11,14 +11,12 @@ import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
 import com.example.lunchbox.R
+import com.example.lunchbox.dataclass.POIItemTag
 import com.example.lunchbox.fragment.AddressSearchFragment
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
-import com.example.lunchbox.manager.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
@@ -53,6 +51,15 @@ class MainActivity : AppCompatActivity() {
                     isFragmentOpened=true
                 }
             }
+            radius_submit_button.id->{
+                Log.d("Button","radius Submit button Downed")
+                val text= radius_edit_text.text.toString()
+                val radius=text.toInt()
+                circle?.radius=radius
+                val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
+                circle?.center=pin?.mapPoint
+                mapview?.addCircle(circle)
+            }
 
         }
 
@@ -60,9 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-    enum class POIItemNumber(val number:Int) {
-        PICKMARKER(0),RANGEPOINT(1),CIRCLE(2)
-    }
+
 
 
 
@@ -116,17 +121,23 @@ class MainActivity : AppCompatActivity() {
         mapview=MapView(this)
         viewGroup.addView(mapview)
 
-
         //마커 세팅
         marker=MapPOIItem()
         marker.itemName="Test_Marker"
-        marker.tag= POIItemNumber.PICKMARKER.number
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
         marker.markerType=MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
+        marker.tag=POIItemTag.PIN
 
 
-
+        //써클의 기본 세팅
+        circle=MapCircle(
+            mapview?.mapCenterPoint,  // center
+            500,  // 미터 단위
+            ContextCompat.getColor(this, R.color.ThemeSubColor),
+            ContextCompat.getColor(this, R.color.ThemeColor)// fillColor
+        )
+        circle?.tag=POIItemTag.CIRCLE
 
         //위치추적 매니저 생성.
         myLocationManager= LocationManager(this)
@@ -137,35 +148,22 @@ class MainActivity : AppCompatActivity() {
 
 
 
-        //써클의 기본 세팅
-        circle=MapCircle(
-            mapview?.mapCenterPoint,  // center
-            500,  // radius
-            ContextCompat.getColor(this, R.color.ThemeColor),
-            ContextCompat.getColor(this, R.color.ThemeSubColor)// fillColor
-        )
-        circle?.tag= POIItemNumber.CIRCLE.number
 
-        //******드래그 가능한 원의 포인트 세팅******
-        rangePoint=MapPOIItem()
-        rangePoint?.isDraggable=true
-        rangePoint?.markerType=MapPOIItem.MarkerType.CustomImage
-        rangePoint?.customImageResourceId= R.drawable.question
-        rangePoint?.setCustomImageAnchor(0.5f, 0.5f)
-        rangePoint?.itemName="rangePoint"
-        rangePoint?.tag= POIItemNumber.RANGEPOINT.number
+
+
 
 
         //POI이벤트 생성
-        customPOIEvents= POIEvents(circle!!, rangePoint!!)
+        //customPOIEvents= POIEvents(circle!!, rangePoint!!)
 
 
         //프래그먼트 추가
         val fragmentManager=supportFragmentManager
-        val searchFragment= AddressSearchFragment()
+        val searchFragment= AddressSearchFragment(mapview!!)
+
+        //프래그먼트에 리스트 클릭시 할 행동 추가.
         searchFragment.setListClickListener {
             customMapViewEvents!!.goToCustomLocation(it.x,it.y)
-
         }
         val transaction=fragmentManager.beginTransaction()
         transaction.replace(R.id.Search_Frame,searchFragment).commitAllowingStateLoss()
@@ -176,6 +174,7 @@ class MainActivity : AppCompatActivity() {
         myLocationButton.setOnClickListener(clickListener)
         search_button.setOnClickListener(clickListener)
         Map_layout.setOnClickListener(clickListener)
+        radius_submit_button.setOnClickListener(clickListener)
         //SearchView 리스너 세팅
 
     }

@@ -1,24 +1,23 @@
 package com.example.lunchbox.manager
 
 import android.location.Location
-import kotlin.math.PI
-import kotlin.math.absoluteValue
+import kotlin.math.*
 
 class DistanceManager {
-    fun Pythagoras(x1:Double,y1:Double,x2:Double,y2:Double):Double{
+    fun pythagoras(x1:Double,y1:Double,x2:Double,y2:Double):Double{
         val x=x1-x2
         val y=y2-y1
         return Math.sqrt(x*x+y*y)
     }
-    fun LocationToDistance(Location1:Location, Location2:Location):Double{
+    fun locationToDistance(Location1:Location, Location2:Location):Double{
         val lon1=Location1.longitude
         val lon2=Location2.longitude
         val lat1=Location1.latitude
         val lat2=Location2.latitude
         var theta = lon1 - lon2
-        var dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta))
+        var dist = sin(deg2rad(lat1)) * sin(deg2rad(lat2)) + cos(deg2rad(lat1)) * cos(deg2rad(lat2)) * cos(deg2rad(theta))
 
-        dist = Math.acos(dist)
+        dist = acos(dist)
         dist = rad2deg(dist)
         dist *= 60 * 1.1515* 1609.344
 

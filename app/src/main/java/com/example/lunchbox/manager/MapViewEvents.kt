@@ -1,17 +1,16 @@
 package com.example.lunchbox.manager
 
-import android.app.Activity
 import android.util.Log
+import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
-import java.io.Serializable
 import java.util.*
 import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener {
+class MapViewEvents(private val myLocationManager: LocationManager, private val marker:MapPOIItem): MapView.MapViewEventListener {
     var timer: Timer? = null
     var isTracking=true
     var mapview:MapView?=null
@@ -28,15 +27,17 @@ class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem
         setMyLocation()
         goToLocation()
         initPin()
+        mapview?.removeAllCircles()
     }
 
-    //외부에서 사용할 위치 이동 버튼
+    //외부에서 사용할 위치 이동
     fun goToCustomLocation(x:Double,y:Double){
         isTracking=false
         setGoalLocation(MapPoint.mapPointWithGeoCoord(y,x))
         goToLocation()
         initTimer()
         initPin()
+        mapview?.removeAllCircles()
     }
 
 
@@ -108,6 +109,7 @@ class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem
         initPin()
         goToLocation()
         initTimer()
+        mapview?.removeAllCircles()
     }
 
     override fun onMapViewDoubleTapped(p0: MapView?, p1: MapPoint?) {

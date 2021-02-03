@@ -11,8 +11,7 @@ import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener,
-    Serializable {
+class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem): MapView.MapViewEventListener {
     var timer: Timer? = null
     var isTracking=true
     var mapview:MapView?=null
@@ -28,6 +27,15 @@ class MapViewEvents(val myLocationManager: LocationManager,val marker:MapPOIItem
         isTracking=true
         setMyLocation()
         goToLocation()
+        initPin()
+    }
+
+    //외부에서 사용할 위치 이동 버튼
+    fun goToCustomLocation(x:Double,y:Double){
+        isTracking=false
+        setGoalLocation(MapPoint.mapPointWithGeoCoord(y,x))
+        goToLocation()
+        initTimer()
         initPin()
     }
 

@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.lunchbox.R
+import com.example.lunchbox.dataclass.Place
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.RecyclerViewAdapter
@@ -21,17 +22,21 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-class AddressSearchFragment:Fragment() {
+class AddressSearchFragment(): Fragment() {
     private var mapViewEvents:MapViewEvents?=null
+    var listClicked:((Place)->Unit)?=null
+
+
+    fun setListClickListener(doing:(Place)->Unit){
+        listClicked=doing
+
+    }
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        arguments?.let { mapViewEvents=it.get("mapview") as MapViewEvents
-        if(mapViewEvents!=null){
-            Log.d("Bundle","mapViewEvent Success")
-            }
-        else{
-            Log.d("Bundle","mapViewEvent Failed")
-        }
+        arguments?.let {
+
         }
 
 
@@ -50,7 +55,10 @@ class AddressSearchFragment:Fragment() {
                     val restAPIClient=RestAPIClient()
 
                     restAPIClient.getFromKeyword(query,126.97942,37.592128000000002,getString(R.string.api_key)) { data: SearchingWithKeywordDataclass ->
-                        recyclerView.adapter=RecyclerViewAdapter(data)
+                        if(listClicked==null)
+                            recyclerView.adapter=RecyclerViewAdapter(data)
+                        else
+                            recyclerView.adapter=RecyclerViewAdapter(data, listClicked!!)
                     }
 
                 return true }

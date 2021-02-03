@@ -13,7 +13,7 @@ import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>() {
 
     private var searchedData:SearchingWithKeywordDataclass?=null
-    private var onViewHolderClicked:(()->Place)?=null
+    private var onViewHolderClicked:((Place)->Unit)?=null
 
     //데이터만 표시
     constructor(searchedData: SearchingWithKeywordDataclass?) : this() {
@@ -21,7 +21,7 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
     }
 
     //데이터랑 데이터 클릭 했을 시 사용
-    constructor(searchedData: SearchingWithKeywordDataclass?,onViewHolderClicked:()->Place) : this(searchedData) {
+    constructor(searchedData: SearchingWithKeywordDataclass?,onViewHolderClicked:(Place)->Unit) : this(searchedData) {
         this.searchedData=searchedData
         this.onViewHolderClicked=onViewHolderClicked
     }
@@ -30,10 +30,7 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
         val view = LayoutInflater.from(parent.context)
             .inflate(R.layout.item_recycle, parent, false)
         Log.d("onCreate","done")
-        return if (searchedData!=null)
-                ViewHolder(view, searchedData!!)
-            else
-                ViewHolder(view)
+        return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -41,6 +38,14 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
             val item = it.documents[position]
             holder.placeName.text = item.place_name
             holder.address.text = item.road_address_name
+            holder.place=item
+            holder.view.setOnClickListener{
+                if(onViewHolderClicked!=null&&holder.place!=null) {
+                    onViewHolderClicked!!(holder.place!!)
+                }
+
+
+            }
         }
 
     }
@@ -52,18 +57,12 @@ class RecyclerViewAdapter () : RecyclerView.Adapter<RecyclerViewAdapter.ViewHold
 
 
 
-    inner class ViewHolder(view: View) : RecyclerView.ViewHolder(view) {
-        constructor(view: View, data: SearchingWithKeywordDataclass) : this(view) {
+    inner class ViewHolder(var view: View) : RecyclerView.ViewHolder(view) {
 
-        }
+        var place:Place?=null
         val placeName: TextView = view.findViewById(R.id.place_title)
         val address: TextView = view.findViewById(R.id.place_address)
-        init {
-            view.setOnClickListener{
-                onViewHolderClicked
 
-            }
-        }
 
     }
 

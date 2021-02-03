@@ -12,10 +12,13 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.replace
 import com.example.lunchbox.R
+import com.example.lunchbox.fragment.AddressSearchFragment
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
+import com.example.lunchbox.manager.RecyclerViewAdapter
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.MapCircle
 import net.daum.mf.map.api.MapPOIItem
@@ -157,10 +160,16 @@ class MainActivity : AppCompatActivity() {
         customPOIEvents= POIEvents(circle!!, rangePoint!!)
 
 
-        //프래그먼트에 맵뷰 주기.
-        val bundle=Bundle(1)
-        bundle.putSerializable("mapview",customMapViewEvents)
-        search_fragment.arguments=bundle
+        //프래그먼트 추가
+        val fragmentManager=supportFragmentManager
+        val searchFragment= AddressSearchFragment()
+        searchFragment.setListClickListener {
+            customMapViewEvents!!.goToCustomLocation(it.x,it.y)
+
+        }
+        val transaction=fragmentManager.beginTransaction()
+        transaction.replace(R.id.Search_Frame,searchFragment).commitAllowingStateLoss()
+
 
 
         //버튼 리스너 세팅

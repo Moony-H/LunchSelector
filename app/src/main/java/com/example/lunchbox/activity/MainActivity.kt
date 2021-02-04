@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     var mapview:MapView?=null
     var marker=MapPOIItem()
     var customPOIEvents: POIEvents?=null
-    var rangePoint:MapPOIItem?=null
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
     var longitude:Double=126.97942//경도
@@ -35,11 +34,11 @@ class MainActivity : AppCompatActivity() {
     var customMapViewEvents: MapViewEvents?=null
     var circle:MapCircle?=null
 
-    fun checkRadiusLimits(radius: Int):Int{
-        return if (radius>20000)
-            20000
+    private fun checkRadiusLimits(radius: Int):Int{
+        return if (radius>3000)
+            3000
         else if(radius<0)
-            0
+            100
         else
             radius
 
@@ -60,16 +59,31 @@ class MainActivity : AppCompatActivity() {
                     isFragmentOpened=true
                 }
             }
+
+
             radius_submit_button.id->{
                 Log.d("Button","radius Submit button Downed")
+
+                //원 지우기
+                mapview?.removeAllCircles()
+
+                //텍스트를 받아와 인트로 바꾸고 반지름 리미트 설정
                 val text= radius_edit_text.text.toString()
                 var radius=text.toInt()
                 radius=checkRadiusLimits(radius)
 
+
+
+                //원을 핀의 위치에 추가.
                 circle?.radius=radius
                 val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
                 circle?.center=pin?.mapPoint
                 mapview?.addCircle(circle)
+
+
+                //원이 전부 표시되게 줌 레벨 변경
+                val mapPointBounds:MapPointBounds= circle!!.bound
+                mapview?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
             }
 
         }
@@ -171,8 +185,7 @@ class MainActivity : AppCompatActivity() {
         val searchFragment= AddressSearchFragment(mapview!!)
 
 
-        val mapPointBounds:MapPointBounds= circle!!.bound
-        mapview?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds))
+
 
 
         //프래그먼트에 리스트 클릭시 할 행동 추가.
@@ -181,7 +194,6 @@ class MainActivity : AppCompatActivity() {
         }
         val transaction=fragmentManager.beginTransaction()
         transaction.replace(R.id.Search_Frame,searchFragment).commitAllowingStateLoss()
-
 
 
         //버튼 리스너 세팅

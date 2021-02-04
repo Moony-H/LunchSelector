@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.example.lunchbox.R
+import com.example.lunchbox.staticMethod.StaticUtils
 
 
 class OptionActivity : AppCompatActivity() {
@@ -13,8 +14,8 @@ class OptionActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        window.decorView.systemUiVisibility=(View.SYSTEM_UI_FLAG_FULLSCREEN or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION)
+        setContentView(R.layout.activity_option)
+        StaticUtils.setFullScreenMode(this)
 
         
 

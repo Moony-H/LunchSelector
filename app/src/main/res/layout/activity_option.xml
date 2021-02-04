@@ -1,11 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MainActivity"
-    android:id="@+id/Main_layout">
+    android:orientation="vertical"
+    android:id="@+id/option_layout"
+
+    android:gravity="center_horizontal"
+    >
+    <TextView
+        android:id="@+id/option_location_point_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="기준 위치: null"
+        android:textSize="@dimen/main_text"
+        android:layout_marginTop="@dimen/main_text"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/main_text"
+            android:text="반경:"
+            />
+        <EditText
+            android:id="@+id/option_range_editText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="null"
+            android:textSize="@dimen/main_text"
+            />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="4"
+        android:layout_marginTop="@dimen/main_text"
+        >
+        <ToggleButton
+            android:id="@+id/option_toggle_koreanFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="한식"
+            android:textOn="한식!"
+            android:textSize="@dimen/main_text"
+            android:layout_weight="1"
+
+            />
+        <ToggleButton
+            android:id="@+id/option_toggle_westernFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="양식"
+            android:textOn="양식!"
+            android:textSize="@dimen/main_text"
+            android:layout_weight="1"
+            />
+        <ToggleButton
+            android:id="@+id/option_toggle_chineseFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="중식"
+            android:textOn="중식!"
+            android:textSize="@dimen/main_text"
+            android:layout_weight="1" />
+        <ToggleButton
+            android:id="@+id/option_toggle_japaneseFood"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textOff="일식"
+            android:textOn="일식!"
+            android:textSize="@dimen/main_text"
+            android:layout_weight="1"
+            />
+    </LinearLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        >
+        <LinearLayout
+            android:id="@+id/option_selecting_start_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:src="@drawable/question"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="시작하기!"
+                android:textSize="@dimen/main_text"
+                />
+
+
+        </LinearLayout>
+    </FrameLayout>
 
 
 
@@ -13,4 +118,6 @@
 
 
 
-</RelativeLayout>
+
+
+</LinearLayout>

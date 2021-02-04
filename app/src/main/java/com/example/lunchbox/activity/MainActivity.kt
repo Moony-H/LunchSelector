@@ -17,11 +17,9 @@ import com.example.lunchbox.fragment.AddressSearchFragment
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
 import com.example.lunchbox.manager.POIEvents
+import com.example.lunchbox.staticMethod.StaticUtils
 import kotlinx.android.synthetic.main.activity_main.*
-import net.daum.mf.map.api.MapCircle
-import net.daum.mf.map.api.MapPOIItem
-import net.daum.mf.map.api.MapPoint
-import net.daum.mf.map.api.MapView
+import net.daum.mf.map.api.*
 
 
 class MainActivity : AppCompatActivity() {
@@ -36,6 +34,17 @@ class MainActivity : AppCompatActivity() {
     var myLocationManager: LocationManager?=null
     var customMapViewEvents: MapViewEvents?=null
     var circle:MapCircle?=null
+
+    fun checkRadiusLimits(radius: Int):Int{
+        return if (radius>20000)
+            20000
+        else if(radius<0)
+            0
+        else
+            radius
+
+    }
+
     private val clickListener = View.OnClickListener {
         when(it.id){
             myLocationButton.id-> {
@@ -54,7 +63,9 @@ class MainActivity : AppCompatActivity() {
             radius_submit_button.id->{
                 Log.d("Button","radius Submit button Downed")
                 val text= radius_edit_text.text.toString()
-                val radius=text.toInt()
+                var radius=text.toInt()
+                radius=checkRadiusLimits(radius)
+
                 circle?.radius=radius
                 val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
                 circle?.center=pin?.mapPoint
@@ -108,9 +119,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         resources.getColor(R.color.ThemeColor)
         //전체화면모드 활성화
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        StaticUtils.setFullScreenMode(this)
 
 
         //위치 데이터 리스트
@@ -161,6 +170,11 @@ class MainActivity : AppCompatActivity() {
         val fragmentManager=supportFragmentManager
         val searchFragment= AddressSearchFragment(mapview!!)
 
+
+        val mapPointBounds:MapPointBounds= circle!!.bound
+        mapview?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds))
+
+
         //프래그먼트에 리스트 클릭시 할 행동 추가.
         searchFragment.setListClickListener {
             customMapViewEvents!!.goToCustomLocation(it.x,it.y)
@@ -175,7 +189,7 @@ class MainActivity : AppCompatActivity() {
         search_button.setOnClickListener(clickListener)
         Map_layout.setOnClickListener(clickListener)
         radius_submit_button.setOnClickListener(clickListener)
-        //SearchView 리스너 세팅
+
 
     }
 

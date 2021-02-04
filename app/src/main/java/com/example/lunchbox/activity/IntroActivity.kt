@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lunchbox.R
+import com.example.lunchbox.staticMethod.StaticUtils
 import kotlinx.android.synthetic.*
 import kotlinx.android.synthetic.main.activity_intro.*
 import kotlin.concurrent.timer
@@ -23,9 +24,7 @@ class IntroActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_intro)
 
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        StaticUtils.setFullScreenMode(this)
 
 
         timer(period = 300)
@@ -40,7 +39,8 @@ class IntroActivity : AppCompatActivity() {
                 finish++
                 if(finish==3)
                 {
-                    cancel();startActivity(Intent(this@IntroActivity, MainActivity::class.java))
+                    cancel();StaticUtils.intentManger(this@IntroActivity,MainActivity::class.java)
+
                 }
             }
         }

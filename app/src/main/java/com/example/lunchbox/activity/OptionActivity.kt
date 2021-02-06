@@ -2,6 +2,7 @@ package com.example.lunchbox.activity
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
 import android.view.View
 import android.widget.CompoundButton
 import com.example.lunchbox.R
@@ -54,6 +55,10 @@ class OptionActivity : AppCompatActivity() {
         intent.getStringExtra("Longitude")?.let { longitude=it.toDouble() }
         intent.getStringExtra("Latitude")?.let { latitude=it.toDouble() }
 
+        //받아온거 세팅
+
+        option_location_point_text.text
+        option_range_editText.setText(radius.toString())
 
         //토글 버튼 리스너 세팅
         option_toggle_koreanFood.setOnCheckedChangeListener(toggleButtonListener)
@@ -69,7 +74,7 @@ class OptionActivity : AppCompatActivity() {
                 if(toggleFoodList[i])
                     foodList.add(FoodTypeTag.getKoreanStringWithFoodTypeTag(i))
             }
-            puts.put("radius",)
+
             StaticUtils.intentManger(this,ResultActivity::class.java,"FoodList", foodList as ArrayList<String>)
 
         }

@@ -13,6 +13,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lunchbox.R
 import com.example.lunchbox.dataclass.POIItemTag
+import com.example.lunchbox.dataclass.PinData
 import com.example.lunchbox.fragment.AddressSearchFragment
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.manager.MapViewEvents
@@ -25,7 +26,7 @@ import net.daum.mf.map.api.*
 class MainActivity : AppCompatActivity() {
     private var isFragmentOpened=false
     var mapview:MapView?=null
-    var marker=MapPOIItem()
+    private var marker:PinData?=null
     var customPOIEvents: POIEvents?=null
     private var backKeyPressedTime:Long=0
     var latitude:Double=37.592128000000002//위도
@@ -46,10 +47,14 @@ class MainActivity : AppCompatActivity() {
 
     private val clickListener = View.OnClickListener {
         when(it.id){
+
+            //현재 내 위치로 버튼
             myLocationButton.id-> {
                 Log.e("Location", "Location Button Downed")
                 customMapViewEvents?.goToMyLocation()
             }
+
+            //프래그먼트 소환 버튼
             search_button.id->{
                 Log.d("Button","Search_Button Downed")
                 if(!isFragmentOpened)
@@ -60,7 +65,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
 
-
+            //반지름 제출 버튼
             radius_submit_button.id->{
                 Log.d("Button","radius Submit button Downed")
 
@@ -76,8 +81,7 @@ class MainActivity : AppCompatActivity() {
 
                 //원을 핀의 위치에 추가.
                 circle?.radius=radius
-                val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
-                circle?.center=pin?.mapPoint
+                circle?.center=getPinLocation()
                 mapview?.addCircle(circle)
 
 
@@ -86,11 +90,23 @@ class MainActivity : AppCompatActivity() {
                 mapview?.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
             }
 
+            //옵션으로 넘어가기 버튼
+            main_start_button.id->{
+                Log.d("Button","Go to Option")
+                val longitude=getPinLocation()?.mapPointGeoCoord?.longitude.toString()
+                val latitude=getPinLocation()?.mapPointGeoCoord?.latitude.toString()
+                StaticUtils.intentManger(this,OptionActivity::class.java, mapOf("Radius" to circle?.radius.toString(),"Longitude" to longitude,"Latitude" to latitude))
+            }
+
         }
 
     }
 
+    private fun getPinLocation():MapPoint?{
+        val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
+        return pin?.mapPoint
 
+    }
 
 
 
@@ -145,13 +161,13 @@ class MainActivity : AppCompatActivity() {
         viewGroup.addView(mapview)
 
         //마커 세팅
-        marker=MapPOIItem()
-        marker.itemName="Test_Marker"
-        marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
-        marker.markerType=MapPOIItem.MarkerType.BluePin
-        marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
-        marker.tag=POIItemTag.PIN
-
+        val basicMarker=MapPOIItem()
+        basicMarker.itemName="Test_Marker"
+        basicMarker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
+        basicMarker.markerType=MapPOIItem.MarkerType.BluePin
+        basicMarker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
+        basicMarker.tag=POIItemTag.PIN
+        marker?.pin=basicMarker
 
         //써클의 기본 세팅
         circle=MapCircle(
@@ -166,7 +182,7 @@ class MainActivity : AppCompatActivity() {
         myLocationManager= LocationManager(this)
 
         //맵 이벤트 생성
-        customMapViewEvents= MapViewEvents( myLocationManager!!,marker)
+        customMapViewEvents= MapViewEvents( myLocationManager!!,marker?.pin)
 
 
 

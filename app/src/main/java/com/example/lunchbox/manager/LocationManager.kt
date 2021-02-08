@@ -30,7 +30,7 @@ class LocationManager (val ActivityToUse: Activity){
     var isGPSEnabled=false
     var isNetworkEnabled=false
     //익명 클래스로 넣어줌.
-    val locationListener= object :LocationListener{
+    private val locationListener= object :LocationListener{
         //위치가 바뀔때 콜백할 메서드. 나는 클래스 필드에다가 넣는 것으로 마무리 했다.(더 좋은 방법이 있을 것 같다.)
         override fun onLocationChanged(location:Location){
             longitude=location.longitude
@@ -85,8 +85,8 @@ class LocationManager (val ActivityToUse: Activity){
                Toast.makeText(ActivityToUse, R.string.GPS_Disabled_Message, Toast.LENGTH_SHORT).show()
            }
            else {
-               longitude = location?.longitude// 다 갠차느면 로케이션 업데이트.
-               latitude = location?.latitude
+               longitude = location.longitude// 다 갠차느면 로케이션 업데이트.
+               latitude = location.latitude
 
            }
        }
@@ -98,8 +98,8 @@ class LocationManager (val ActivityToUse: Activity){
                Toast.makeText(ActivityToUse, R.string.GPS_Disabled_Message, Toast.LENGTH_SHORT).show()
            }
            else {
-               longitude = location?.longitude
-               latitude = location?.latitude
+               longitude = location.longitude
+               latitude = location.latitude
            }
        }
        else{

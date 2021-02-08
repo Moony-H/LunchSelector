@@ -2,7 +2,7 @@ package com.example.lunchbox.dataclass
 
 import net.daum.mf.map.api.MapPOIItem
 
-data class PinData(
+data class Marker(
     var pin:MapPOIItem,
-    val place: Place?
+    var place: Place?
 )

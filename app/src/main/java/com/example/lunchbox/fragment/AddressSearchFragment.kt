@@ -1,7 +1,6 @@
 package com.example.lunchbox.fragment
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,14 +13,9 @@ import com.example.lunchbox.dataclass.POIItemTag
 import com.example.lunchbox.dataclass.Place
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.manager.RecyclerViewAdapter
-import com.example.lunchbox.manager.RestAPIClient
+import com.example.lunchbox.Client.RestAPIClient
 
 import net.daum.mf.map.api.MapView
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 
 class AddressSearchFragment(val mapview: MapView?): Fragment() {
     var listClicked:((Place)->Unit)?=null
@@ -51,7 +45,7 @@ class AddressSearchFragment(val mapview: MapView?): Fragment() {
         view.findViewById<SearchView>(R.id.LocationSearchView).setOnQueryTextListener(object :SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 query?.let{
-                    val restAPIClient=RestAPIClient()
+                    val restAPIClient= RestAPIClient()
                     val pin=mapview?.findPOIItemByTag(POIItemTag.PIN)
                     val x=pin?.mapPoint?.mapPointGeoCoord?.longitude
                     val y=pin?.mapPoint?.mapPointGeoCoord?.latitude

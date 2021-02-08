@@ -1,7 +1,7 @@
-package com.example.lunchbox.manager
+package com.example.lunchbox.event
 
 import android.util.Log
-import net.daum.mf.map.api.MapCircle
+import com.example.lunchbox.manager.LocationManager
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
 import net.daum.mf.map.api.MapView
@@ -11,14 +11,35 @@ import kotlin.concurrent.timer
 
 
 class MapViewEvents(private val myLocationManager: LocationManager, private val marker:MapPOIItem): MapView.MapViewEventListener {
-    var timer: Timer? = null
-    var isTracking=true
-    var mapview:MapView?=null
-    var goalMapPoint:MapPoint?= null
-    var goalLocationLatitude:Double=0.0
-    var goalLocationLongitude:Double=0.0
+
+    private lateinit var goalMapPoint:MapPoint
+    private lateinit var timer: Timer
+
+    private var isTracking=true
+    private var mapview:MapView?=null
 
 
+
+
+    //기준 위치 변경
+    private fun setGoalLocation(mapPoint: MapPoint){
+        goalMapPoint=mapPoint
+    }
+
+
+    //현재 사용자의 실제 위치로 변경
+    private fun setMyLocation() {
+        setGoalLocation(MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude))
+    }
+
+
+
+
+    //설정된 위치로 이동.
+    private fun goToLocation(){
+        mapview?.setMapCenterPoint(goalMapPoint,true)
+
+    }
 
 
     //외부에서 사용할 내 위치로 이동 버튼
@@ -30,7 +51,11 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
         mapview?.removeAllCircles()
     }
 
-    //외부에서 사용할 위치 이동
+
+
+
+
+    //외부에서 사용할 아무 위치로 이동
     fun goToCustomLocation(x:Double,y:Double){
         isTracking=false
         setGoalLocation(MapPoint.mapPointWithGeoCoord(y,x))
@@ -41,22 +66,10 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
     }
 
 
-    //설정된 위치로 이동.
-    private fun goToLocation(){
-        mapview?.setMapCenterPoint(goalMapPoint,true)
-
-    }
-
-    //현재 사용자의 실제 위치로 변경
-    private fun setMyLocation() {
-        setGoalLocation(MapPoint.mapPointWithGeoCoord(myLocationManager.latitude, myLocationManager.longitude))
-    }
 
 
-    //사용자가 원하는 위치로 변경
-    private fun setGoalLocation(mapPoint: MapPoint){
-        goalMapPoint=mapPoint
-    }
+
+
 
 
 
@@ -64,7 +77,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     private fun initTimer(){
 
-        timer?.cancel()
+        timer.cancel()
         timerStart()
 
     }
@@ -119,7 +132,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Drag_Start")
-        timer?.cancel()
+        timer.cancel()
 
     }
 

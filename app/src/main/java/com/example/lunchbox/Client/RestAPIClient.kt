@@ -1,10 +1,6 @@
-package com.example.lunchbox.manager
+package com.example.lunchbox.Client
 
 import android.util.Log
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.example.lunchbox.R
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import retrofit2.Call
 import retrofit2.Callback

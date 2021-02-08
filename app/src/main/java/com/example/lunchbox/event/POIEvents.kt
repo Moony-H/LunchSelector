@@ -1,4 +1,4 @@
-package com.example.lunchbox.manager
+package com.example.lunchbox.event
 
 import android.util.Log
 import com.example.lunchbox.activity.MainActivity

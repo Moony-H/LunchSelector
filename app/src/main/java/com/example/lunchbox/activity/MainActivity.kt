@@ -228,21 +228,25 @@ class MainActivity : AppCompatActivity() {
         radius_submit_button.setOnClickListener(clickListener)
 
 
+        if(myLocationManager.checkLocationPermission()){
+            myLocationManager.locationListenerSetting()
+            myLocationManager.locationUpdateSetting(5000,0.1f)
+        }
+
     }
 
 
     override fun onResume() {
         super.onResume()
+        Log.e("Licecycle","Resume")
 
-        //마커 생성
 
+        if(myLocationManager.checkLocationPermission())
+            myLocationManager.locationListenerSetting()
 
 
         //위치 권한 체크 밑 위치추적 활성화
-        if(myLocationManager.checkLocationPermission()){
-            myLocationManager.locationListenerSetting()
-            myLocationManager.locationUpdateSetting(5000,0.1f)
-        }
+
 
 
         //맵뷰에 이벤트 추가
@@ -253,8 +257,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
+        Log.e("Life","onPause")
         myLocationManager.StopLocationListener()
         mapview.removeAllPOIItems()
+        //customMapViewEvents.timerStop()
     }
 
 

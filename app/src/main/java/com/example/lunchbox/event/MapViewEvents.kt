@@ -65,6 +65,10 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
         mapview?.removeAllCircles()
     }
 
+    //외부에서 쓰레드 스탑.
+    fun timerStop(){
+        timer.cancel()
+    }
 
 
 
@@ -88,7 +92,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
         mapview?.addPOIItem(marker)
     }
 
-    private fun timerStart() {
+    fun timerStart() {
 
         timer = timer(period = 3000, initialDelay = 3000) {
             if(isTracking){

@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
             //현재 내 위치로 버튼
             myLocationButton.id-> {
                 Log.e("Location", "Location Button Downed")
-                customMapViewEvents?.goToMyLocation()
+                customMapViewEvents.goToMyLocation()
             }
 
             //프래그먼트 소환 버튼
@@ -169,14 +169,17 @@ class MainActivity : AppCompatActivity() {
 
 
         //*****Initialize*****
+        val viewGroup = Map_layout
+        mapview=MapView(this)
+        viewGroup.addView(mapview)
         myLocationManager= LocationManager(this)//위치 추적 매니저 생성
         marker= MapPOIItem()//공통 마커 생성
         customMapViewEvents= MapViewEvents(myLocationManager,marker)//맵뷰 이벤트 생성
 
+
+
         //맵을 뷰에 추가
-        val viewGroup = Map_layout
-        mapview=MapView(this)
-        viewGroup.addView(mapview)
+
 
 
 
@@ -220,7 +223,7 @@ class MainActivity : AppCompatActivity() {
 
 
 
-
+        mapview.setMapViewEventListener(customMapViewEvents)
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
         search_button.setOnClickListener(clickListener)
@@ -228,21 +231,18 @@ class MainActivity : AppCompatActivity() {
         radius_submit_button.setOnClickListener(clickListener)
 
 
-        if(myLocationManager.checkLocationPermission()){
-            myLocationManager.locationListenerSetting()
-            myLocationManager.locationUpdateSetting(5000,0.1f)
-        }
+        myLocationManager.requestPermission()
 
     }
 
 
     override fun onResume() {
         super.onResume()
-        Log.e("Licecycle","Resume")
+        Log.d("Lifecycle","Resume")
+        myLocationManager.locationListenerSetting()
+        myLocationManager.locationUpdateSetting(5000,0.1f)
 
 
-        if(myLocationManager.checkLocationPermission())
-            myLocationManager.locationListenerSetting()
 
 
         //위치 권한 체크 밑 위치추적 활성화
@@ -250,7 +250,7 @@ class MainActivity : AppCompatActivity() {
 
 
         //맵뷰에 이벤트 추가
-        mapview.setMapViewEventListener(customMapViewEvents)
+
 
 
     }
@@ -258,7 +258,7 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.e("Life","onPause")
-        myLocationManager.StopLocationListener()
+        myLocationManager.stopLocationListener()
         mapview.removeAllPOIItems()
         //customMapViewEvents.timerStop()
     }
@@ -267,6 +267,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
-        myLocationManager.StopLocationListener()
+        myLocationManager.stopLocationListener()
     }
 }

@@ -13,7 +13,7 @@ import kotlin.concurrent.timer
 class MapViewEvents(private val myLocationManager: LocationManager, private val marker:MapPOIItem): MapView.MapViewEventListener {
 
     private lateinit var goalMapPoint:MapPoint
-    private lateinit var timer: Timer
+    private  var timer: Timer?=null
 
     private var isTracking=true
     private var mapview:MapView?=null
@@ -57,6 +57,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     //외부에서 사용할 아무 위치로 이동
     fun goToCustomLocation(x:Double,y:Double){
+        Log.e("hey","GoToCustom")
         isTracking=false
         setGoalLocation(MapPoint.mapPointWithGeoCoord(y,x))
         goToLocation()
@@ -67,7 +68,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     //외부에서 쓰레드 스탑.
     fun timerStop(){
-        timer.cancel()
+        timer?.cancel()
     }
 
 
@@ -81,7 +82,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     private fun initTimer(){
 
-        timer.cancel()
+        timer?.cancel()
         timerStart()
 
     }
@@ -100,8 +101,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
             }
             goToLocation()
             initPin()
-
-                //Log.e("Map", "${myLocationManager.latitude} ${myLocationManager.longitude}")
+            Log.e("timer","Running")
         }
 
 
@@ -136,7 +136,7 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
 
     override fun onMapViewDragStarted(p0: MapView?, p1: MapPoint?) {
         Log.e("Map", "Drag_Start")
-        timer.cancel()
+        timer?.cancel()
 
     }
 

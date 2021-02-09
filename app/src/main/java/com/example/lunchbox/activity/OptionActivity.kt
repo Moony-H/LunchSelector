@@ -84,7 +84,6 @@ class OptionActivity : AppCompatActivity() {
             if(true in toggleFoodList) {
                 val foodList = mutableListOf<String>()
                 val results = mutableListOf<SearchingWithKeywordDataclass>()
-                var repeat = 0
                 for (i in toggleFoodList.indices) {
                     if (toggleFoodList[i])
                         foodList.add(FoodTypeTag.getKoreanStringWithFoodTypeTag(i))

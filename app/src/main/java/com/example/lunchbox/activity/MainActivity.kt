@@ -111,8 +111,15 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Button","Go to Option")
                 val longitude=getPinLocation()?.mapPointGeoCoord?.longitude.toString()
                 val latitude=getPinLocation()?.mapPointGeoCoord?.latitude.toString()
-                val map= mapOf("Radius" to circle.radius.toString(), "Longitude" to longitude,"Latitude" to latitude,"Adress" to main_address_textView.text.toString())
-                StaticUtils.intentManger(this,OptionActivity::class.java, map)
+                if(longitude=="null" || latitude=="null") {
+                    Toast.makeText(this, "시작할 위치를 정해 주세요", Toast.LENGTH_LONG).show()
+                }
+                else{
+                    val map= mapOf("Radius" to circle.radius.toString(), "Longitude" to longitude,"Latitude" to latitude,"Address" to main_address_textView.text.toString())
+                    Log.e("intent","circle: ${circle.radius} longitude: $longitude latitude: $latitude")
+                    StaticUtils.intentManger(this,OptionActivity::class.java, map)
+                }
+
             }
 
         }
@@ -238,10 +245,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        Log.d("MainActivity","onRestart")
+        customMapViewEvents.timerStart()
 
+    }
     override fun onResume() {
         super.onResume()
-        Log.d("Lifecycle","Resume")
+        Log.d("MainActivity","Resume")
         myLocationManager.locationListenerSetting()
         myLocationManager.locationUpdateSetting(5000,0.1f)
 
@@ -260,16 +272,21 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        Log.e("Life","onPause")
+        Log.e("MainActivity","onPause")
         myLocationManager.stopLocationListener()
-        mapview.removeAllPOIItems()
         //customMapViewEvents.timerStop()
     }
 
+    override fun onStop() {
+        super.onStop()
+        Log.e("MainActivity","onStop")
+        customMapViewEvents.timerStop()
+    }
 
 
     override fun onDestroy() {
         super.onDestroy()
         myLocationManager.stopLocationListener()
+
     }
 }

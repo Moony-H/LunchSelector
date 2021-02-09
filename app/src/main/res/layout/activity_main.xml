@@ -38,7 +38,8 @@
         android:layout_toRightOf="@+id/edit_text_frame"
         android:layout_marginTop="45dp"
         android:layout_marginLeft="10dp"
-        >
+        android:layout_toEndOf="@+id/edit_text_frame"
+        android:layout_marginStart="10dp">
     </Button>
     <ImageButton
         android:id="@+id/myLocationButton"
@@ -102,10 +103,17 @@
 
     <TextView
         android:id="@+id/main_address_textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="130dp"
+        android:layout_height="50dp"
+        android:layout_toRightOf="@+id/main_start_button"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="45dp"
+        android:layout_marginLeft="40dp"
+        android:background="@color/colorWhite"
 
-        />
+
+        android:layout_toEndOf="@+id/main_start_button"
+        android:layout_marginStart="40dp" />
 
 
 

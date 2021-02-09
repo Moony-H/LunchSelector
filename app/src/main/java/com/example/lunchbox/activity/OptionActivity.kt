@@ -1,23 +1,31 @@
 package com.example.lunchbox.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.view.View
 import android.widget.CompoundButton
+import android.widget.Toast
+import com.example.lunchbox.Client.RestAPIClient
 import com.example.lunchbox.R
 import com.example.lunchbox.dataclass.FoodTypeTag
+import com.example.lunchbox.dataclass.Place
+import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import com.example.lunchbox.staticMethod.StaticUtils
 import kotlinx.android.synthetic.main.activity_option.*
+import java.util.Random
 
 
 class OptionActivity : AppCompatActivity() {
 
     private val toggleFoodList = mutableListOf(false,false,false,false)
-    private var radius=0.0
+    private var radius=0
     private var longitude=0.0
     private var latitude=0.0
+    private var address="Not Found"
     private var backKeyPressedTime:Long=0
+    private var restAPIClient=RestAPIClient()
     private val toggleButtonListener= CompoundButton.OnCheckedChangeListener{ compoundButton: CompoundButton, b: Boolean ->
         when(compoundButton.id){
             option_toggle_koreanFood.id->{
@@ -37,8 +45,11 @@ class OptionActivity : AppCompatActivity() {
 
     }
 
-    private fun randomRoulette(){
-
+    private fun randomRoulette(list: List<SearchingWithKeywordDataclass>):Place{
+        val random= Random()
+        val num=random.nextInt(list.size)
+        val docRandomNum=random.nextInt(list[num].documents.size)
+        return list[num].documents[docRandomNum]
     }
 
 
@@ -51,14 +62,16 @@ class OptionActivity : AppCompatActivity() {
         StaticUtils.setFullScreenMode(this)
 
         //intent 받아오기
-        intent.getStringExtra("Radius")?.let { radius=it.toDouble() }
+        intent.getStringExtra("Radius")?.let { radius=it.toInt() }
         intent.getStringExtra("Longitude")?.let { longitude=it.toDouble() }
         intent.getStringExtra("Latitude")?.let { latitude=it.toDouble() }
+        intent.getStringExtra("Address")?.let { address= it }
 
         //받아온거 세팅
 
-        option_location_point_text.text
+        option_address_text.text=address
         option_range_editText.setText(radius.toString())
+
 
         //토글 버튼 리스너 세팅
         option_toggle_koreanFood.setOnCheckedChangeListener(toggleButtonListener)
@@ -68,14 +81,35 @@ class OptionActivity : AppCompatActivity() {
 
         //스타트 버튼 리스너 세팅
         option_selecting_start_button.setOnClickListener{
-            val foodList= mutableListOf<String>()
-            val puts= mutableMapOf<String,String>()
-            for(i in toggleFoodList.indices){
-                if(toggleFoodList[i])
-                    foodList.add(FoodTypeTag.getKoreanStringWithFoodTypeTag(i))
-            }
+            if(true in toggleFoodList) {
+                val foodList = mutableListOf<String>()
+                val results = mutableListOf<SearchingWithKeywordDataclass>()
+                var repeat = 0
+                for (i in toggleFoodList.indices) {
+                    if (toggleFoodList[i])
+                        foodList.add(FoodTypeTag.getKoreanStringWithFoodTypeTag(i))
+                }
+                restAPIClient.getFromKeyword(
+                    foodList,
+                    longitude,
+                    latitude,
+                    getString(R.string.api_key),
+                    radius
+                ) {
+                    results.add(it)
+                    if (results.size >= foodList.size) {
+                        val randomResult = randomRoulette(results)
+                        val intent = Intent(this, ResultActivity::class.java)
+                        intent.putExtra("Place", randomResult)
+                        startActivity(intent)
+                    }
 
-            StaticUtils.intentManger(this,ResultActivity::class.java,"FoodList", foodList as ArrayList<String>)
+
+                }
+            }
+            else
+                Toast.makeText(this,"음식 종류를 한가지 이상 선택해 주세요.",Toast.LENGTH_SHORT).show()
+
 
         }
 

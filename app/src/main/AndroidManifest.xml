@@ -24,6 +24,11 @@
             android:launchMode="singleTask">
 
         </activity>
+        <activity android:name=".activity.OptionActivity">
+
+        </activity>
+        <activity android:name=".activity.ResultActivity"/>
+
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

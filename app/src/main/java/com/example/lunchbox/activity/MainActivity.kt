@@ -21,6 +21,7 @@ import com.example.lunchbox.event.POIEvents
 import com.example.lunchbox.staticMethod.StaticUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.*
+import kotlin.system.exitProcess
 
 
 class MainActivity : AppCompatActivity() {
@@ -110,7 +111,8 @@ class MainActivity : AppCompatActivity() {
                 Log.d("Button","Go to Option")
                 val longitude=getPinLocation()?.mapPointGeoCoord?.longitude.toString()
                 val latitude=getPinLocation()?.mapPointGeoCoord?.latitude.toString()
-                StaticUtils.intentManger(this,OptionActivity::class.java, mapOf("Radius" to circle.radius.toString(),"Longitude" to longitude,"Latitude" to latitude))
+                val map= mapOf("Radius" to circle.radius.toString(), "Longitude" to longitude,"Latitude" to latitude,"Adress" to main_address_textView.text.toString())
+                StaticUtils.intentManger(this,OptionActivity::class.java, map)
             }
 
         }
@@ -152,7 +154,7 @@ class MainActivity : AppCompatActivity() {
             if (System.currentTimeMillis() <= backKeyPressedTime + 2500) {
                 ActivityCompat.finishAffinity(this)
 
-                System.exit(0)
+                exitProcess(0)
             }
         }
     }
@@ -174,7 +176,7 @@ class MainActivity : AppCompatActivity() {
         viewGroup.addView(mapview)
         myLocationManager= LocationManager(this)//위치 추적 매니저 생성
         marker= MapPOIItem()//공통 마커 생성
-        customMapViewEvents= MapViewEvents(myLocationManager,marker)//맵뷰 이벤트 생성
+        customMapViewEvents= MapViewEvents(myLocationManager,marker,this,getString(R.string.map_key),main_address_textView)//맵뷰 이벤트 생성
 
 
 
@@ -229,6 +231,7 @@ class MainActivity : AppCompatActivity() {
         search_button.setOnClickListener(clickListener)
         Map_layout.setOnClickListener(clickListener)
         radius_submit_button.setOnClickListener(clickListener)
+        main_start_button.setOnClickListener(clickListener)
 
 
         myLocationManager.requestPermission()

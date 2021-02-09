@@ -13,6 +13,7 @@ interface RestAPIClientInterface{
     fun getFromKeyword(
         @Header("Authorization") key:String,
         @Query("query") Keyword:String,
+        @Query("category_group_code") category_group_code:String,
         @Query("x") x:Double,
         @Query("y") y:Double,
         @Query("radius") radius:Int,

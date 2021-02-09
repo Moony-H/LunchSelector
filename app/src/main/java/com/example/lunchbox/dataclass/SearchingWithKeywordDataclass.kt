@@ -1,5 +1,7 @@
 package com.example.lunchbox.dataclass
 
+import java.io.Serializable
+
 
 data class SearchingWithKeywordDataclass(
     val meta: KeywordMeta,
@@ -16,6 +18,6 @@ data class Place(
     val address_name:String,
     val road_address_name:String,
     val x:Double,
-    val y:Double)
+    val y:Double):Serializable
 
 

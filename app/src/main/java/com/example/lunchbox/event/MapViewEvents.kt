@@ -1,16 +1,26 @@
 package com.example.lunchbox.event
 
+import android.app.Activity
 import android.util.Log
+import android.widget.TextView
+import com.example.lunchbox.R
 import com.example.lunchbox.manager.LocationManager
 import net.daum.mf.map.api.MapPOIItem
 import net.daum.mf.map.api.MapPoint
+import net.daum.mf.map.api.MapReverseGeoCoder
 import net.daum.mf.map.api.MapView
 import java.util.*
 import kotlin.concurrent.timer
 
 
 
-class MapViewEvents(private val myLocationManager: LocationManager, private val marker:MapPOIItem): MapView.MapViewEventListener {
+class MapViewEvents(private val myLocationManager: LocationManager,
+                    private val marker:MapPOIItem,
+                    private val activity:Activity,
+                    private val localAPIKey:String,
+                    private val textView: TextView): MapView.MapViewEventListener {
+
+
 
     private lateinit var goalMapPoint:MapPoint
     private  var timer: Timer?=null
@@ -19,11 +29,16 @@ class MapViewEvents(private val myLocationManager: LocationManager, private val 
     private var mapview:MapView?=null
 
 
+    private val reverseGeoCodingListener=MapReverseLocation {
+        textView.text=it
+    }
 
 
     //기준 위치 변경
     private fun setGoalLocation(mapPoint: MapPoint){
         goalMapPoint=mapPoint
+        val reverseGeoCoder=MapReverseGeoCoder(localAPIKey,mapPoint,reverseGeoCodingListener,activity)
+        reverseGeoCoder.startFindingAddress()
     }
 
 

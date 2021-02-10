@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
 
+
+        <meta-data android:name="android.max_aspect" android:value="2.1" />
+
         <activity android:name=".activity.IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

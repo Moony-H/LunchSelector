@@ -122,6 +122,10 @@ class OptionActivity : AppCompatActivity() {
                             //음식점이 있을 경우
                             val intent = Intent(this, ResultActivity::class.java)
                             intent.putExtra("Place", randomResult)
+                            intent.putExtra("UserLongitude",longitude)
+                            intent.putExtra("UserLatitude",latitude)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                             startActivity(intent)
                         }
 

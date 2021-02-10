@@ -17,7 +17,7 @@ data class Place(
     val phone:String,
     val address_name:String,
     val road_address_name:String,
-    val x:Double,
-    val y:Double):Serializable
+    val x:Double,//longitude
+    val y:Double):Serializable//latitude
 
 

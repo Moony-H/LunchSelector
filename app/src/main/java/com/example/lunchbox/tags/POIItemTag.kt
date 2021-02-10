@@ -4,6 +4,7 @@ class POIItemTag {
     companion object{
         const val PIN=0
         const val CIRCLE=1
+        const val LINE=2
 
     }
 }

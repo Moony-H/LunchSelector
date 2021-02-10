@@ -248,7 +248,8 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         Log.d("MainActivity","onRestart")
-
+        val viewGroup = Map_layout
+        //viewGroup.addView(mapview)
         //액티비티가 다시 시작 되었을 때, 트래킹 모드 쓰레드 실행
         customMapViewEvents.timerStart()
 

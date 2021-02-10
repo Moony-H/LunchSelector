@@ -11,13 +11,10 @@ import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.lunchbox.R
-import com.example.lunchbox.dataclass.POIItemTag
-import com.example.lunchbox.dataclass.Marker
-import com.example.lunchbox.event.MapReverseLocation
+import com.example.lunchbox.tags.POIItemTag
 import com.example.lunchbox.fragment.AddressSearchFragment
 import com.example.lunchbox.manager.LocationManager
 import com.example.lunchbox.event.MapViewEvents
-import com.example.lunchbox.event.POIEvents
 import com.example.lunchbox.staticMethod.StaticUtils
 import kotlinx.android.synthetic.main.activity_main.*
 import net.daum.mf.map.api.*
@@ -58,6 +55,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //클릭 이벤트 처리
     private val clickListener = View.OnClickListener {
         when(it.id){
 
@@ -126,6 +124,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+    //현재 핀의 위치 가져오기
     private fun getPinLocation():MapPoint?{
         val pin=mapview.findPOIItemByTag(POIItemTag.PIN)
         return pin?.mapPoint
@@ -172,6 +171,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         resources.getColor(R.color.ThemeColor)
+
         //전체화면모드 활성화
         StaticUtils.setFullScreenMode(this)
 
@@ -180,14 +180,11 @@ class MainActivity : AppCompatActivity() {
         //*****Initialize*****
         val viewGroup = Map_layout
         mapview=MapView(this)
-        viewGroup.addView(mapview)
+        viewGroup.addView(mapview)  //맵을 뷰에 추가
         myLocationManager= LocationManager(this)//위치 추적 매니저 생성
         marker= MapPOIItem()//공통 마커 생성
         customMapViewEvents= MapViewEvents(myLocationManager,marker,this,getString(R.string.map_key),main_address_textView)//맵뷰 이벤트 생성
 
-
-
-        //맵을 뷰에 추가
 
 
 
@@ -200,7 +197,7 @@ class MainActivity : AppCompatActivity() {
         marker.mapPoint = MapPoint.mapPointWithGeoCoord(latitude,longitude)
         marker.markerType=MapPOIItem.MarkerType.BluePin
         marker.selectedMarkerType=MapPOIItem.MarkerType.RedPin
-        marker.tag=POIItemTag.PIN
+        marker.tag= POIItemTag.PIN
 
 
 
@@ -211,7 +208,7 @@ class MainActivity : AppCompatActivity() {
             ContextCompat.getColor(this, R.color.ThemeSubColor),
             ContextCompat.getColor(this, R.color.ThemeColor)// fillColor
         )
-        circle.tag=POIItemTag.CIRCLE
+        circle.tag= POIItemTag.CIRCLE
 
 
 
@@ -231,8 +228,10 @@ class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.Search_Frame,searchFragment).commitAllowingStateLoss()
 
 
-
+        //맵 뷰 이벤트 세팅
         mapview.setMapViewEventListener(customMapViewEvents)
+
+
         //버튼 리스너 세팅
         myLocationButton.setOnClickListener(clickListener)
         search_button.setOnClickListener(clickListener)
@@ -241,6 +240,7 @@ class MainActivity : AppCompatActivity() {
         main_start_button.setOnClickListener(clickListener)
 
 
+        //위치 권한 요청
         myLocationManager.requestPermission()
 
     }
@@ -248,23 +248,24 @@ class MainActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         Log.d("MainActivity","onRestart")
+
+        //액티비티가 다시 시작 되었을 때, 트래킹 모드 쓰레드 실행
         customMapViewEvents.timerStart()
 
     }
+
+
     override fun onResume() {
         super.onResume()
         Log.d("MainActivity","Resume")
+
+        //위치 권한이 승락 되었을 때, 리스너 세팅과 업데이트 세팅
         myLocationManager.locationListenerSetting()
         myLocationManager.locationUpdateSetting(5000,0.1f)
 
 
 
 
-        //위치 권한 체크 밑 위치추적 활성화
-
-
-
-        //맵뷰에 이벤트 추가
 
 
 
@@ -273,6 +274,8 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         Log.e("MainActivity","onPause")
+
+        //리스너 돌아가는거 스탑
         myLocationManager.stopLocationListener()
         //customMapViewEvents.timerStop()
     }
@@ -280,12 +283,16 @@ class MainActivity : AppCompatActivity() {
     override fun onStop() {
         super.onStop()
         Log.e("MainActivity","onStop")
+
+        //트래킹 모드 쓰레드 스탑
         customMapViewEvents.timerStop()
     }
 
 
     override fun onDestroy() {
         super.onDestroy()
+
+        //혹시 모르니 한번더..ㅎㅎ
         myLocationManager.stopLocationListener()
 
     }

@@ -1,4 +1,4 @@
-package com.example.lunchbox.dataclass
+package com.example.lunchbox.tags
 
 class POIItemTag {
     companion object{

@@ -1,4 +1,4 @@
-package com.example.lunchbox.Client
+package com.example.lunchbox.client
 
 import android.util.Log
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
@@ -45,9 +45,9 @@ class RestAPIClient() {
         })
     }
 
-    fun getFromKeyword(keywords:List<String>, x:Double, y:Double,apiKey:String,range: Int,doing:(SearchingWithKeywordDataclass)->Unit){
+    fun getFromKeyword(keywords:List<String>, x:Double, y:Double,apiKey:String,range: Int,tag:String,doing:(SearchingWithKeywordDataclass)->Unit){
         for(i in keywords){
-            val call = api.getFromKeyword(apiKey,i,"FD6",x,y,range,"distance")
+            val call = api.getFromKeyword(apiKey,i,tag,x,y,range,"distance")
             call.enqueue(object: Callback<SearchingWithKeywordDataclass> {
                 override fun onResponse(
                     call: Call<SearchingWithKeywordDataclass>,

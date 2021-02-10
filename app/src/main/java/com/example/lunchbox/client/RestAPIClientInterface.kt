@@ -1,4 +1,4 @@
-package com.example.lunchbox.Client
+package com.example.lunchbox.client
 
 import com.example.lunchbox.dataclass.SearchingWithKeywordDataclass
 import retrofit2.Call

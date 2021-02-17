@@ -85,23 +85,26 @@ class MainActivity : AppCompatActivity() {
 
                 //텍스트를 받아와 인트로 바꾸고 반지름 리미트 설정
                 val text= radius_edit_text.text.toString()
-                var radius=text.toInt()
-                radius=checkRadiusLimits(radius)
+                if(text.toString()!=""){
+                    var radius=text.toInt()
+                    radius=checkRadiusLimits(radius)
 
-                //리미트에 걸린 반지름 설정.
-                radius_edit_text.setText(radius.toString())
-
-
-
-                //원을 핀의 위치에 추가.
-                circle.radius=radius
-                circle.center=getPinLocation()
-                mapview.addCircle(circle)
+                    //리미트에 걸린 반지름 설정.
+                    radius_edit_text.setText(radius.toString())
 
 
-                //원이 전부 표시되게 줌 레벨 변경
-                val mapPointBounds:MapPointBounds= circle.bound
-                mapview.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
+
+                    //원을 핀의 위치에 추가.
+                    circle.radius=radius
+                    circle.center=getPinLocation()
+                    mapview.addCircle(circle)
+
+
+                    //원이 전부 표시되게 줌 레벨 변경
+                    val mapPointBounds:MapPointBounds= circle.bound
+                    mapview.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
+                }
+
             }
 
             //옵션으로 넘어가기 버튼

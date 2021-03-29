@@ -4,6 +4,7 @@ package com.example.lunchbox.activity
 import android.animation.ObjectAnimator
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 
 import android.util.Log
 import android.view.View
@@ -78,31 +79,38 @@ class MainActivity : AppCompatActivity() {
 
             //반지름 제출 버튼
             radius_submit_button.id->{
-                Log.d("Button","radius Submit button Downed")
+                val text= radius_edit_text.text
+                if(TextUtils.isEmpty(text)){
+                    Toast.makeText(this, "반지름을 입력해 주세요.", Toast.LENGTH_LONG).show()
+                }
+                else{
+                    Log.d("Button","radius Submit button Downed")
 
-                //원 지우기
-                mapview.removeAllCircles()
+                    //원 지우기
+                    mapview.removeAllCircles()
 
-                //텍스트를 받아와 인트로 바꾸고 반지름 리미트 설정
-
-                val text= radius_edit_text.text.toString()
-                var radius=text.toInt()
-                radius=checkRadiusLimits(radius)
-
-                //리미트에 걸린 반지름 설정.
-                radius_edit_text.setText(radius.toString())
+                    //텍스트를 받아와 인트로 바꾸고 반지름 리미트 설정
 
 
+                    var radius=text.toString().toInt()
+                    radius=checkRadiusLimits(radius)
 
-                //원을 핀의 위치에 추가.
-                circle.radius=radius
-                circle.center=getPinLocation()
-                mapview.addCircle(circle)
+                    //리미트에 걸린 반지름 설정.
+                    radius_edit_text.setText(radius.toString())
 
 
-                //원이 전부 표시되게 줌 레벨 변경
-                val mapPointBounds:MapPointBounds= circle.bound
-                mapview.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
+
+                    //원을 핀의 위치에 추가.
+                    circle.radius=radius
+                    circle.center=getPinLocation()
+                    mapview.addCircle(circle)
+
+
+                    //원이 전부 표시되게 줌 레벨 변경
+                    val mapPointBounds:MapPointBounds= circle.bound
+                    mapview.moveCamera(CameraUpdateFactory.newMapPointBounds(mapPointBounds,50))
+                }
+
             }
 
             //옵션으로 넘어가기 버튼

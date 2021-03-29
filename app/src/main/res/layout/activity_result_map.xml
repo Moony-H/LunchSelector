@@ -7,52 +7,34 @@
         android:id="@+id/result_map_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <TextView
-        android:id="@+id/result_map_distance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="40dp"
-        android:text="null"
-        android:textSize="50dp"
-        />
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="50dp"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
-        >
-
-        <TextView
+        android:layout_marginBottom="80dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp">
+        <Button
+            android:id="@+id/result_map_route_car_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="길찾기"
-            android:textSize="40dp"/>
+            android:text="자동차 길 찾기"/>
         <Button
-            android:id="@+id/result_map_drive_button"
-            android:layout_width="100dp"
+            android:id="@+id/result_map_route_pblc_trans_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="자동차"
-            android:textSize="@dimen/main_text"/>
+            android:text="대중교통 길 찾기"
+            />
         <Button
-            android:id="@+id/result_map_public_transport_button"
-            android:layout_width="100dp"
+            android:id="@+id/result_map_route_foot_button"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="대중교통"
-            android:textSize="@dimen/main_text"/>
-        <Button
-            android:id="@+id/result_map_walk_button"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="도보"
-            android:textSize="@dimen/main_text"/>
+            android:text="도보길 찾기"
+            />
 
     </LinearLayout>
-
 
 
 </RelativeLayout>

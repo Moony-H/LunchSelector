@@ -26,7 +26,7 @@ class ItemFragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        //setContentView와 비슷한 것.(프래그먼트는 액티비티에 소속 되어 있어야 하기 때문에, 레이아웃 말고라도 뷰 그룹이나(container) 다른 인자도 필요함.)
+        //setContentView와 비슷한 것. 레이아웃을 객체화(프래그먼트는 액티비티에 소속 되어 있어야 하기 때문에, 레이아웃 말고라도 뷰 그룹이나(container) 다른 인자도 필요함.)
         val view = inflater.inflate(R.layout.fragment_item_list, container, false)
         // Set the adapter, View가 RecycleView일 경우, 그리고 RecycleView로 캐스팅.
         if (view is RecyclerView) {

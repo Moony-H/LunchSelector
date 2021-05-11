@@ -8,3 +8,5 @@ Choosing what to eat is so difficult. Lunch Selector.
 룰렛을 돌려 사용자가 원하는 음식을 찾게 도와준다.
 
 debug 버전만 사용 가능(릴리즈 키 안받음)
+
+사용하려면 카카오의 키를 받아야 함.(git ignore 해놨음)
